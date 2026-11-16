@@ -1,0 +1,118 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { J } from '../data/pdrb';
+const n = (v: number, f = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const yr = [2021, 2022, 2023, 2024, 2025];
+const maxA = Math.max(...J.adhb);
+const nom = J.adhb.slice(1).map((v, i) => (v / J.adhb[i] - 1) * 100);
+const riil = J.adhk.slice(1).map((v, i) => (v / J.adhk[i] - 1) * 100);
+const nav = [['ringkasan', 'Ringkasan'], ['struktur', 'Struktur'], ['pertumbuhan', 'Pertumbuhan'], ['komoditas', 'Siklus komoditas'], ['perkapita', 'Per kapita'], ['kabkota', 'Kab/kota'], ['catatan', 'Catatan']];
+const sig = [
+  ['Kab. Morowali', 'Sulawesi Tengah', '98,9', '188,9', '+10,8'], ['Kab. Halmahera Tengah', 'Maluku Utara', '9,7', '55,0', '+62,5'],
+  ['Kab. Mimika', 'Papua Tengah', '95,2', '131,1', '−26,2'], ['Kab. Kutai Timur', 'Kalimantan Timur', '136,6', '152,9', '+1,1'],
+  ['Kab. Bengkalis', 'Riau', '139,6', '174,8', '+2,9'], ['Kab. Teluk Bintuni', 'Papua Barat', '31,4', '57,2', '+7,9'],
+];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PDRB Kabupaten/Kota 2021–2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis PDRB 514 kabupaten/kota Indonesia 2021–2025 (BPS, Volume 17, 2026): struktur, pertumbuhan, per kapita, dan siklus komoditas." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Setengah ekonomi Indonesia ada di 50 kabupaten/kota</h1>
+  <p class="lead">Jumlah PDRB 514 kabupaten/kota mencapai Rp23.727 triliun pada 2025. Pertumbuhannya stabil di sekitar 5%, tetapi angka tertinggi dan terendah datang dari tambang.</p>
+  <p class="src">PDRB Kabupaten/Kota di Indonesia 2021–2025 · BPS, Volume 17, 2026 · harga berlaku, triliun rupiah</p>
+  <div class="growth" role="img" aria-label="PDRB harga berlaku 2021 sampai 2025">
+    {J.adhb.map((v, i) => <div class="col"><div class="n">{n(v / 1000, 1)}K</div><div class="bar" style={`--h:${(v / maxA) * 82}%;--i:${i}`}></div><div class="y">{yr[i]}{i > 2 ? '*'.repeat(i - 2) : ''}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Semua angka adalah jumlah PDRB seluruh kabupaten/kota. Angka 2024* sementara dan 2025** sangat sementara.</p></header>
+  <dl class="kf">
+    <div><dt>Rp23.727 T</dt><dd>PDRB harga berlaku 2025, naik dari Rp17.047 T pada 2021. Pertumbuhan nominal 2025: {n(nom[3])}%.</dd></div>
+    <div><dt>5,1%</dt><dd>pertumbuhan riil 2025, hampir sama dengan 5,0–5,3% pada tiga tahun sebelumnya. Ekonomi tumbuh stabil, bukan melonjak.</dd></div>
+    <div><dt>57,0%</dt><dd>PDRB nasional berasal dari Jawa (DKI Jakarta 16,7%, Jawa Timur 14,4%, Jawa Barat 12,9%). Sumatera 22,2%.</dd></div>
+    <div><dt>54,9%</dt><dd>PDRB dihasilkan 50 kabupaten/kota teratas, sementara 200 yang terkecil hanya 5,6%.</dd></div>
+    <div><dt>118×</dt><dd>jarak PDRB per kapita tertinggi (Kab. Morowali, Rp1,07 miliar) dan terendah (Kab. Yahukimo, Rp9,1 juta).</dd></div>
+    <div><dt>−26,2%</dt><dd>kontraksi Kab. Mimika pada 2025, penarik utama kontraksi Papua Tengah (−21,8%).</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="struktur"><div class="wrap grid">
+  <header><h2>Struktur ekonomi</h2><p>Pangsa terhadap jumlah PDRB 514 kab/kota, 2025.</p></header>
+  <div>
+    <Bars items={J.prov.slice(0, 12).map((r) => ({ label: r[0], value: r[2] }))} />
+    <p class="note">Gini PDRB antar kab/kota 0,66 (sangat timpang); Gini PDRB per kapita 0,43. Dari 514 kab/kota, 51 punya PDRB ≥ Rp100 T, 58 antara Rp50–100 T, 247 antara Rp10–50 T, dan 158 di bawah Rp10 T. Kota menyumbang 41,85% PDRB meski jumlahnya hanya 98.</p>
+    <h3>15 kabupaten/kota terbesar (2025)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Kab/kota</th><th>Provinsi</th><th>PDRB (T)</th><th>Per kapita (jt)</th><th>Tumbuh riil</th></tr></thead><tbody>
+      {J.top.map((r) => <tr><td>{r[0]}</td><td>{r[1]}</td><td>{n(r[2], 1)}</td><td>{n(r[3], 1)}</td><td>{n(r[4])}%</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Lima dari enam terbesar ada di Jakarta. Dominasi kota dalam provinsinya paling tajam di Kepulauan Riau (Batam 66,1%), sedangkan di Jawa Tengah, Jawa Barat, dan Riau pangsa kota terbesar hanya sekitar 15%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="pertumbuhan"><div class="wrap grid">
+  <header><h2>Pertumbuhan</h2><p>Nominal dan riil (harga konstan 2010).</p></header>
+  <div>
+    <div class="tw"><table class="cmp"><thead><tr><th>Tahun</th><th>2022</th><th>2023</th><th>2024*</th><th>2025**</th></tr></thead><tbody>
+      <tr><td>Pertumbuhan nominal (%)</td>{nom.map((v) => <td>{n(v)}</td>)}</tr>
+      <tr><td>Pertumbuhan riil (%)</td>{riil.map((v) => <td><b>{n(v)}</b></td>)}</tr>
+      <tr><td>Inflasi implisit (%)</td><td>6,96</td><td>2,00</td><td>2,11</td><td>2,23</td></tr>
+    </tbody></table></div>
+    <p class="note">Lonjakan nominal 2022 (12,66%) sebagian besar efek harga komoditas: deflator implisit naik 6,96%. Sejak 2023 selisih nominal dan riil hanya sekitar 2 poin.</p>
+    <h3>Provinsi: PDRB dan pertumbuhan riil</h3>
+    <div class="tw" style="max-height:520px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>PDRB 2025 (T)</th><th>Pangsa (%)</th><th>Riil 2024*</th><th>Riil 2025**</th></tr></thead><tbody>
+      {J.prov.map((r) => <tr><td>{r[0]}</td><td>{n(r[1], 1)}</td><td>{n(r[2])}</td><td>{n(r[3])}</td><td class={r[4] > 6 ? 'hi' : r[4] < 3 ? 'lo' : ''}>{n(r[4])}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Tercepat 2025: Maluku Utara 34,17%, Sulawesi Tengah 8,47%, Kepulauan Riau 7,05%. Terlambat: Papua Tengah −21,78%, Aceh 2,96%, NTB 3,22%, Sumatera Barat 3,37%. Provinsi Papua dan pemekarannya tidak sebanding antartahun (lihat catatan).</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="komoditas"><div class="wrap grid">
+  <header><h2>Siklus komoditas</h2><p>Nilai ekstrem datang dari daerah tambang dan energi.</p></header>
+  <div>
+    <div class="tw"><table class="cmp"><thead><tr><th>Kab/kota</th><th>Provinsi</th><th>PDRB 2021 (T)</th><th>PDRB 2025 (T)</th><th>Riil 2025 (%)</th></tr></thead><tbody>
+      {sig.map((r) => <tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td><td class={r[4].startsWith('−') ? 'lo' : 'hi'}>{r[4]}</td></tr>)}
+    </tbody></table></div>
+    <p class="t" style="margin-top:14px">Kalimantan Timur naik dari Rp697 T (2021) ke Rp922 T (2022), lalu turun ke Rp844 T (2023) dan hanya Rp890 T pada 2025: pola khas lonjakan harga yang menormal. Tiga kabupaten Halmahera di Maluku Utara tumbuh 62,5%, 51,9%, dan 37,6% pada 2025. Publikasi hanya menyajikan angka; penyebabnya tidak dijelaskan.</p>
+  </div>
+</div></section>
+
+<section class="s" id="perkapita"><div class="wrap grid">
+  <header><h2>PDRB per kapita</h2><p>Juta rupiah per penduduk, harga berlaku 2025. Median kab/kota Rp54,1 juta, rata-rata Rp78,6 juta.</p></header>
+  <div>
+    <h3>Tertinggi</h3><Bars items={J.pkTop.map((r) => ({ label: `${r[0]} (${r[1]})`, value: r[2] }))} unit=" jt" dec={1} />
+    <h3>Terendah</h3><Bars items={J.pkBot.map((r) => ({ label: `${r[0]} (${r[1]})`, value: r[2] }))} unit=" jt" dec={1} tone="ink" top={false} />
+    <p class="note">89 kab/kota punya PDRB per kapita di atas Rp100 juta, sedangkan 65 di bawah Rp30 juta (20 di bawah Rp20 juta). PDRB per kapita tinggi di daerah tambang tidak berarti pendapatan penduduk tinggi: nilai tambah mengalir keluar daerah.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="kabkota"><div class="wrap grid">
+  <header><h2>Tumbuh paling cepat dan lambat</h2><p>Pertumbuhan riil 2025**.</p></header>
+  <div class="tw">
+    <table class="cmp"><thead><tr><th>Tercepat</th><th>Provinsi</th><th>2025**</th><th>2024*</th></tr></thead><tbody>
+      {J.gTop.map((r) => <tr><td>{r[0]}</td><td>{r[1]}</td><td class="hi">{n(r[2])}</td><td>{n(r[3])}</td></tr>)}
+    </tbody></table>
+    <table class="cmp" style="margin-top:24px"><thead><tr><th>Terlambat</th><th>Provinsi</th><th>2025**</th><th>2024*</th></tr></thead><tbody>
+      {J.gBot.map((r) => <tr><td>{r[0]}</td><td>{r[1]}</td><td class="lo">{n(r[2])}</td><td>{n(r[3])}</td></tr>)}
+    </tbody></table>
+    <p class="note">Median pertumbuhan kab/kota 4,94%. Dari 514 kab/kota, 20 tumbuh ≥7%, 229 tumbuh 5–7%, 224 tumbuh 3–5%, 41 di bawah 3%, dan 3 mengalami kontraksi (Mimika, Sumbawa Barat, Kepulauan Seribu).</p>
+  </div>
+</div></section>
+
+<section class="s" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Angka terbaru masih sementara.</b>2024 diberi tanda * (sementara) dan 2025 ** (sangat sementara), jadi bisa direvisi.</li>
+    <li><b>Pemekaran Papua.</b>Tahun 2021–2022 untuk Papua dan Papua Barat masih memuat wilayah yang kini menjadi Papua Selatan, Tengah, Pegunungan, dan Papua Barat Daya. Jumlah nasional tetap sebanding karena tidak ada penghitungan ganda, tetapi pertumbuhan provinsi Papua lintas 2022–2023 tidak sebanding.</li>
+    <li><b>Jumlah kab/kota tidak sama dengan total provinsi.</b>Selisih hingga ±2% per provinsi pada 2025 (mis. Sumatera Selatan +1,99%, Aceh −1,18%).</li>
+    <li><b>Satuan PDRB per kapita.</b>Judul tabel menulis "miliar rupiah", tetapi nilainya konsisten dengan ribu rupiah (Jakarta Pusat 949.177 = Rp949 juta). Halaman ini memakai juta rupiah.</li>
+    <li><b>Salah ketik di sumber.</b>"Kab. Pakpak Bhaat" di tabel pertumbuhan Sumatera Utara; saya samakan dengan Pakpak Bharat.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Kabupaten/Kota di Indonesia 2021–2025</em>, Volume 17, 2026 (katalog 9302025, ISSN 1907-8242). Seluruh angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
