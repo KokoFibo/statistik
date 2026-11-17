@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { J } from '../data/pdrbprov';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const yr = [2021, 2022, 2023, 2024, 2025];
+const maxA = Math.max(...J.adhb);
+const riil = J.adhk.slice(1).map((v, i) => (v / J.adhk[i] - 1) * 100);
+const nom = J.adhb.slice(1).map((v, i) => (v / J.adhb[i] - 1) * 100);
+const kontrib = [...J.ind].sort((a, b) => b[4] - a[4]).slice(0, 8).map((r) => ({ label: r[0], value: r[4] }));
+const nav = [['ringkasan', 'Ringkasan'], ['pulau', 'Pulau'], ['sektor', 'Lapangan usaha'], ['harga', 'Siklus harga'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PDRB Provinsi menurut Lapangan Usaha 2021–2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis PDRB 38 provinsi menurut 17 lapangan usaha 2021–2025 (BPS, Volume 19, 2026): struktur, sumber pertumbuhan, dan siklus harga komoditas." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Ekonomi tumbuh 5%, digerakkan industri, bukan tambang</h1>
+  <p class="lead">Industri pengolahan menyumbang 1,31 dari 5,10 poin pertumbuhan 2025. Pertambangan, yang melonjak pada 2022, justru menyusut 0,39% dan harganya terus turun.</p>
+  <p class="src">PDRB Provinsi-Provinsi di Indonesia menurut Lapangan Usaha 2021–2025 · BPS, Volume 19, 2026 · harga berlaku, triliun rupiah</p>
+  <div class="growth" role="img" aria-label="PDRB harga berlaku 2021 sampai 2025">
+    {J.adhb.map((v, i) => <div class="col"><div class="n">{n(v / 1000, 1)}K</div><div class="bar" style={`--h:${(v / maxA) * 82}%;--i:${i}`}></div><div class="y">{yr[i]}{i > 2 ? '*'.repeat(i - 2) : ''}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Jumlah PDRB 38 provinsi. 2024* sementara dan 2025** sangat sementara.</p></header>
+  <dl class="kf">
+    <div><dt>Rp23.636 T</dt><dd>PDRB harga berlaku 2025, naik dari Rp16.952 T pada 2021. Pertumbuhan riil 2025 sebesar {n(riil[3])}%, stabil di kisaran 5,0–5,4% sejak 2022.</dd></div>
+    <div><dt>23,5%</dt><dd>PDRB berasal dari industri pengolahan, sama seperti 2021. Perdagangan 14,6% dan pertanian 13,0% menyusul.</dd></div>
+    <div><dt>+34,3%</dt><dd>kenaikan harga implisit pertambangan pada 2022, lalu −6,2% (2023) dan −10,0% (2024). Pangsa pertambangan turun dari 7,3% ke 6,6%.</dd></div>
+    <div><dt>79,15%</dt><dd>PDRB dari Sumatera dan Jawa (79,54% pada 2021). Kawasan timur naik tipis dari 20,46% ke 20,85%.</dd></div>
+    <div><dt>6,23%</dt><dd>pertumbuhan Sulawesi, tertinggi di antara pulau. Maluku dan Papua hanya 1,44% setelah kontraksi Papua Tengah.</dd></div>
+    <div><dt>19,2×</dt><dd>jarak PDRB per kapita DKI Jakarta (Rp367,7 juta) dan Papua Pegunungan (Rp19,1 juta).</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="pulau"><div class="wrap grid">
+  <header><h2>Gambaran spasial</h2><p>Distribusi dan pertumbuhan riil per pulau.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Pulau</th><th>Pangsa 2021</th><th>Pangsa 2025</th><th>2022</th><th>2023</th><th>2024*</th><th>2025**</th></tr></thead><tbody>
+    {J.island.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2])}</td>{r[3].map((g) => <td class={g > 6 ? 'hi' : g < 3 ? 'lo' : ''}>{n(g)}</td>)}</tr>)}
+  </tbody></table>
+  <p class="note">Pertumbuhan tertinggi 2025 di Sulawesi, ditopang industri pengolahan, pertanian, dan perdagangan. Industri pengolahan menjadi salah satu sumber pertumbuhan utama di semua pulau. Pada 2022 provinsi Papua dimekarkan; PDRB provinsi baru baru tersedia sejak 2023.</p></div>
+</div></section>
+
+<section class="s" id="sektor"><div class="wrap grid">
+  <header><h2>17 lapangan usaha</h2><p>Pangsa, pertumbuhan riil, dan kontribusi terhadap pertumbuhan 2025 (poin persentase).</p></header>
+  <div>
+    <div class="tw"><table class="cmp"><thead><tr><th>Lapangan usaha</th><th>Pangsa 2021</th><th>Pangsa 2025</th><th>2022</th><th>2023</th><th>2024*</th><th>2025**</th><th>Kontrib. 2025</th></tr></thead><tbody>
+      {J.ind.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2])}</td>{r[3].map((g) => <td class={g > 7.5 ? 'hi' : g < 0 ? 'lo' : ''}>{n(g)}</td>)}<td><b>{n(r[4])}</b></td></tr>)}
+    </tbody></table></div>
+    <h3>Penyumbang pertumbuhan 2025 (poin)</h3>
+    <Bars items={kontrib} />
+    <p class="note">Total 5,10 poin. Industri pengolahan (1,31), perdagangan (0,76), dan pertanian (0,61) menyumbang separuh lebih. Transportasi tumbuh 17,35% pada 2022 dan pangsanya naik dari 3,79% ke 5,12% (pulih pasca-pandemi); akomodasi dan makan minum tumbuh 8,7% pada 2025. Pertanian mempercepat diri dari 2,0% ke 5,41%, terutama tanaman pangan (+9,8% setelah dua tahun turun).</p>
+    <h3>Subsektor pilihan</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Subsektor</th><th>PDRB 2025 (T)</th><th>2022</th><th>2023</th><th>2024*</th><th>2025**</th></tr></thead><tbody>
+      {J.subs.map((r) => <tr><td>{r[0]}</td><td>{n(r[1], 1)}</td>{r[2].map((g) => <td class={g > 9 ? 'hi' : g < 0 ? 'lo' : ''}>{n(g, 1)}</td>)}</tr>)}
+    </tbody></table></div>
+    <p class="note">Industri logam dasar tumbuh 10,6–16,1% setiap tahun, sementara bijih logam turun 9,7% pada 2025. Hilirisasi terlihat dari selisih keduanya, meski publikasi tidak mengaitkan angka ini ke kebijakan.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="harga"><div class="wrap grid">
+  <header><h2>Siklus harga</h2><p>Inflasi implisit per lapangan usaha: pertambangan menarik PDRB nominal naik lalu turun.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Lapangan usaha</th><th>2022 (%)</th><th>2025 (%)</th></tr></thead><tbody>
+    {[...J.ind].sort((a, b) => b[5] - a[5]).slice(0, 6).map((r) => <tr><td>{r[0]}</td><td class={r[5] > 8 ? 'hi' : ''}>{n(r[5])}</td><td class={r[6] < 0 ? 'lo' : ''}>{n(r[6])}</td></tr>)}
+  </tbody></table>
+  <p class="note">Harga implisit pertambangan melonjak 34,3% pada 2022, turun 6,2% pada 2023, 10,0% pada 2024, dan 0,3% pada 2025. PDRB nasional nominal tumbuh 12,94% pada 2022 tetapi hanya 6,6–7,9% sesudahnya; selisih nominal dan riil mengecil dari 7,6 ke 2,2 poin. Efeknya paling terasa di Kalimantan Timur (PDRB Rp697 T pada 2021, Rp922 T pada 2022, lalu Rp889 T pada 2025).</p></div>
+</div></section>
+
+<section class="s" id="provinsi"><div class="wrap grid">
+  <header><h2>38 provinsi</h2><p>Sektor dominan dan pangsa sektor tambang, industri, dan pertanian dalam PDRB provinsi, 2025.</p></header>
+  <div class="tw" style="max-height:600px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>PDRB (T)</th><th>Pangsa</th><th>Sektor dominan</th><th>Riil 2024*</th><th>Riil 2025**</th><th>Per kapita (jt)</th><th>Tambang</th><th>Industri</th><th>Pertanian</th></tr></thead><tbody>
+    {J.prov.map((r) => <tr><td>{r[0]}</td><td>{n(r[1], 1)}</td><td>{n(r[2])}</td><td>{r[3]} {n(r[4], 1)}%</td><td>{n(r[5])}</td><td class={(r[6] as number) > 6 ? 'hi' : (r[6] as number) < 3 ? 'lo' : ''}>{n(r[6])}</td><td>{n(r[7], 1)}</td><td>{n(r[9], 1)}</td><td>{n(r[10], 1)}</td><td>{n(r[11], 1)}</td></tr>)}
+  </tbody></table></div>
+</div></section>
+<section class="s alt"><div class="wrap">
+  <p class="t">Spesialisasi: Papua Tengah 73,7% tambang; Kalimantan Timur 34,2%. Industri mendominasi Maluku Utara (42,0%), Kepulauan Riau (41,6%), Sulawesi Tengah (41,2%), dan Jawa Barat (40,4%). Pertanian terbesar di Sulawesi Barat (47,7%), Gorontalo (36,8%), dan Jambi (34,5%). Administrasi pemerintahan masih 20,8% PDRB Maluku dan 20,7% Papua Pegunungan. Pertumbuhan 2025 tertinggi: Maluku Utara 34,18%, Sulawesi Tengah 8,47%, Kepulauan Riau 6,94%; terendah: Papua Tengah −21,81%, Aceh 2,97%, NTB 3,22%.</p>
+</div></section>
+
+<section class="s" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Batasan sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Angka terbaru sementara.</b>2024 diberi tanda * dan 2025 tanda **, sehingga dapat direvisi.</li>
+    <li><b>Pemekaran Papua.</b>Papua Barat Daya, Papua Selatan, Tengah, dan Pegunungan baru memiliki PDRB sejak 2023; angka 2021–2022 provinsi induknya masih memuat wilayah tersebut. Pertumbuhan nasional tetap sebanding.</li>
+    <li><b>Jumlah ini berbeda dari PDRB kab/kota.</b>Jumlah 38 provinsi Rp23.636 T, sedangkan jumlah kab/kota di laporan lain Rp23.727 T (selisih 0,39%).</li>
+    <li><b>Kategori digabung.</b>Jasa perusahaan (M,N) dan jasa lainnya (R,S,T,U) disajikan gabungan; tabel indeks per kategori dan sub-subsektor tidak diulas semuanya di sini.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Provinsi-Provinsi di Indonesia Menurut Lapangan Usaha 2021–2025</em>, Volume 19, 2026 (ISSN 2622–805X). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
