@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { J } from '../data/pekerja';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const hero = [['Buruh/karyawan', 3.29], ['Rata-rata semua', 2.97], ['Bebas nonpertanian', 1.92], ['Bebas pertanian', 1.34]] as const;
+const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendidikan'], ['usaha', 'Lapangan usaha'], ['pekerjaan', 'Pekerjaan dan usia'], ['kesenjangan', 'Kesenjangan'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Keadaan Pekerja di Indonesia Februari 2026 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Keadaan Pekerja di Indonesia Februari 2026 (BPS, Sakernas): upah, jam kerja, pendidikan, lapangan usaha, UMP, dan kesenjangan." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Lebih dari separuh buruh digaji di bawah UMP</h1>
+  <p class="lead">Dari 54,62 juta buruh/karyawan/pegawai, 52,81% menerima upah di bawah Upah Minimum Provinsi pada Februari 2026. Upah rata-rata 68,21 juta pekerja Rp2,97 juta, tetapi pekerja bebas hanya separuhnya.</p>
+  <p class="src">Keadaan Pekerja di Indonesia Februari 2026 · BPS, Sakernas · rata-rata upah/gaji/pendapatan bersih sebulan, juta rupiah</p>
+  <div class="growth" role="img" aria-label="Rata-rata upah bulanan menurut status pekerjaan, Februari 2026">
+    {hero.map(([l, v], i) => <div class="col"><div class="n">{n(v)}</div><div class="bar" style={`--h:${(v / 3.29) * 82}%;--i:${i}`}></div><div class="y">{l}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>"Pekerja" di publikasi ini hanya buruh/karyawan/pegawai dan pekerja bebas, bukan seluruh penduduk bekerja.</p></header>
+  <dl class="kf">
+    <div><dt>68,21 juta</dt><dd>pekerja pada Februari 2026: 54,62 juta buruh/karyawan/pegawai (80,07%), 7,87 juta pekerja bebas nonpertanian, dan 5,72 juta pekerja bebas pertanian. Turun dari 70,82 juta pada Agustus 2025.</dd></div>
+    <div><dt>Rp2,97 juta</dt><dd>rata-rata upah bersih sebulan, naik 4,63% dari Februari 2025 (Rp2,84 juta). Upah buruh naik 6,23% menjadi Rp3,29 juta.</dd></div>
+    <div><dt>52,81%</dt><dd>buruh/karyawan/pegawai digaji di bawah UMP, naik dari 47,13% pada Agustus 2023.</dd></div>
+    <div><dt>−5,4%</dt><dd>perubahan upah pekerja bebas nonpertanian (Rp1,92 juta); pekerja bebas pertanian turun 2,9% ke Rp1,34 juta.</dd></div>
+    <div><dt>79%</dt><dd>upah perempuan dibanding laki-laki (Rp2,52 juta vs Rp3,19 juta); perempuan 33,4% dari pekerja.</dd></div>
+    <div><dt>2,28×</dt><dd>jarak upah provinsi tertinggi (DKI Jakarta Rp5,12 juta) dan terendah (Jawa Tengah Rp2,25 juta).</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="tren"><div class="wrap grid">
+  <header><h2>Tren Agustus 2023 – Februari 2026</h2><p>Upah turun musiman setiap Februari, lalu naik lagi pada Agustus.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Periode</th><th>Buruh</th><th>Bebas tani</th><th>Bebas nontani</th><th>Rata-rata</th><th>Pekerja (juta)</th><th>Jam</th></tr></thead><tbody>
+    {J.tr.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2])}</td><td>{n(r[3])}</td><td><b>{n(r[4])}</b></td><td>{n(r[5])}</td><td>{r[6]}</td></tr>)}
+  </tbody></table>
+  <h3>Buruh/karyawan/pegawai di bawah UMP (%)</h3>
+  <Bars items={J.below.map((v, i) => ({ label: J.tr[i][0], value: v }))} tone="ink" top={false} max={60} />
+  <p class="note">Februari selalu lebih tinggi dari Agustus (54,36%, 52,78%, 52,81% vs 47,13%, 48,44%, 49,70%). Bandingkan Februari dengan Februari: upah buruh Rp3,04 juta (2024), Rp3,09 juta (2025), Rp3,29 juta (2026). Catatan: kelompok di bawah UMP mencakup buruh paruh waktu dan usaha kecil; publikasi tidak merinci penyebabnya.</p></div>
+</div></section>
+
+<section class="s" id="pendidikan"><div class="wrap grid">
+  <header><h2>Pendidikan</h2><p>Upah naik tajam seiring pendidikan, jam kerja relatif sama (37–45 jam).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Pendidikan</th><th>Pekerja (juta)</th><th>Pangsa (%)</th><th>Upah buruh (jt)</th><th>Upah semua (jt)</th></tr></thead><tbody>
+    {J.ed.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2], 1)}</td><td>{n(r[3])}</td><td><b>{n(r[4])}</b></td></tr>)}
+  </tbody></table>
+  <p class="note">Lulusan universitas menerima Rp4,71 juta, 2,4 kali lulusan SD (Rp1,98 juta) dan 1,6 kali lulusan SMA umum (Rp2,95 juta). SMA dan SMK bersama-sama 40,6% pekerja. Lonjakan terbesar terjadi di jenjang diploma (Rp3,95 juta) dan universitas.</p></div>
+</div></section>
+
+<section class="s alt" id="usaha"><div class="wrap grid">
+  <header><h2>Lapangan usaha</h2><p>Klasifikasi KBLI 2025. Diurutkan menurut upah.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Lapangan usaha</th><th>Pekerja (juta)</th><th>Pangsa (%)</th><th>≥ Rp2 juta (%)</th><th>Upah (jt)</th><th>Jam</th></tr></thead><tbody>
+    {[...J.ind].sort((a, b) => b[4] - a[4]).map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2], 1)}</td><td class={r[3] < 50 ? 'lo' : ''}>{n(r[3], 1)}</td><td><b>{n(r[4])}</b></td><td>{r[5]}</td></tr>)}
+  </tbody></table>
+  <p class="note">Industri pengolahan paling banyak menyerap pekerja (12,02 juta; 17,6%), disusul pertanian (8,48 juta) dan konstruksi serta perdagangan (masing-masing sekitar 7,8 juta). Pertambangan jam kerjanya tertinggi (49 jam), pendidikan terendah (34 jam). Hanya 34,2% pekerja pertanian dan 41,4% pekerja jasa lainnya berupah di atas Rp2 juta.</p></div>
+</div></section>
+
+<section class="s" id="pekerjaan"><div class="wrap grid">
+  <header><h2>Jenis pekerjaan, usia, dan jam kerja</h2><p>Siapa yang bekerja dan seberapa lama.</p></header>
+  <div>
+    <h3>Distribusi upah (% pekerja)</h3><Bars items={J.wg.map((r) => ({ label: r[0], value: r[1] }))} tone="ink" top={false} />
+    <p class="note">66,13% berupah minimal Rp2 juta, sedangkan 13,25% di bawah Rp1 juta.</p>
+    <h3>Jenis pekerjaan</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Jenis pekerjaan</th><th>Pekerja (juta)</th><th>Pangsa (%)</th><th>≥ Rp2 juta (%)</th></tr></thead><tbody>
+      {J.occ.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2], 1)}</td><td>{n(r[3], 1)}</td></tr>)}
+    </tbody></table></div>
+    <div class="two"><div><h3>Kelompok umur (% pekerja)</h3><Bars items={J.age.map((r) => ({ label: r[0], value: r[2] }))} /></div>
+    <div><h3>Jam kerja seminggu (% pekerja)</h3><Bars items={J.hrs.map((r) => ({ label: r[0], value: r[1] }))} tone="sun" /></div></div>
+    <p class="note">Pekerja berusia 20–34 tahun mencapai 43,4%. Sebanyak 36,12% bekerja 45–59 jam dan 8,78% bekerja 60 jam atau lebih per minggu.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="kesenjangan"><div class="wrap grid">
+  <header><h2>Kesenjangan</h2><p>Kota dan desa, laki-laki dan perempuan.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Kelompok</th><th>Upah semua (jt)</th><th>Upah buruh (jt)</th><th>Pekerja (juta)</th><th>≥ Rp2 juta (%)</th></tr></thead><tbody>
+    {J.cmp.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1])}</b></td><td>{n(r[2])}</td><td>{n(r[3])}</td><td>{n(r[4], 1)}</td></tr>)}
+  </tbody></table>
+  <p class="note">Upah desa 69,9% dari kota, dan pada Februari 2026 hanya naik 0,68% dibanding setahun sebelumnya (kota 4,91%). Perempuan menerima 78,8% upah laki-laki; jarak terbesar ada pada pekerja bebas (pertanian 59,1%, nonpertanian 56,5%). Laki-laki bekerja 44 jam per minggu dan perempuan 39 jam.</p></div>
+</div></section>
+
+<section class="s" id="provinsi"><div class="wrap grid">
+  <header><h2>38 provinsi</h2><p>Diurutkan menurut upah semua pekerja Februari 2026.</p></header>
+  <div class="tw" style="max-height:600px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>Upah semua (jt)</th><th>Upah buruh (jt)</th><th>vs Feb 2025 (%)</th><th>Pekerja (juta)</th><th>≥ Rp2 juta (%)</th><th>&lt; Rp1 juta (%)</th></tr></thead><tbody>
+    {J.prov.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[4])}</b></td><td>{n(r[5])}</td><td class={(r[6] as number) < 0 ? 'lo' : ''}>{n(r[6], 1)}</td><td>{n(r[1])}</td><td>{n(r[2], 1)}</td><td>{n(r[3], 1)}</td></tr>)}
+  </tbody></table></div>
+  <p class="note" style="grid-column:2">Upah naik di 29 dari 38 provinsi dan turun di 9. Kenaikan terbesar Jambi (+13,5%), Bali (+11,5%), Jawa Barat (+10,7%); penurunan terbesar Kalimantan Utara (−8,9%), Aceh (−8,2%), Maluku Utara (−5,8%). Provinsi Papua baru memiliki sampel kecil sehingga angkanya perlu hati-hati.</p>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Teks narasi dan tabel tidak selalu sama.</b>Narasi menyebut kategori real estat berupah tertinggi dan NTT terendah (Rp2,25 juta), padahal tabel menunjukkan keuangan dan asuransi (Rp5,03 juta) dan Jawa Tengah (Rp2,25 juta). Halaman ini mengikuti tabel. Rata-rata jam kerja 43 di ringkasan eksekutif, 42 di tabel.</li>
+    <li><b>Klasifikasi usaha berubah.</b>Februari 2026 memakai KBLI 2025, periode lain KBLI 2020, jadi perubahan upah per lapangan usaha antarperiode tidak sepenuhnya sebanding dan tidak ditampilkan di sini.</li>
+    <li><b>Halaman duplikat di PDF.</b>Halaman 67–71 adalah lima salinan Tabel 2.11, sehingga tabel upah per provinsi untuk kota, desa, laki-laki, dan perempuan (2.12–2.15) tidak tersedia di file ini.</li>
+    <li><b>Peringatan RSE.</b>Angka bertanda H (RSE 25–50%) perlu hati-hati, terutama untuk provinsi kecil di Papua.</li>
+    <li><b>Upah nominal.</b>Publikasi tidak menyajikan inflasi, jadi kenaikan upah di sini belum disesuaikan harga.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Keadaan Pekerja di Indonesia Februari 2026</em> (katalog 2303006, ISSN 1979-7702). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
