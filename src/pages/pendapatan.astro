@@ -1,0 +1,90 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { J } from '../data/pendapatan';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const hero = [['Buruh/karyawan', 3.29], ['Berusaha sendiri', 1.92], ['Pekerja bebas', 1.68]] as const;
+const groups = ['Pendidikan', 'Umur', 'Status kawin', 'Lapangan usaha', 'Jenis pekerjaan'];
+const nav = [['ringkasan', 'Ringkasan'], ['distribusi', 'Distribusi'], ['bebas', 'Pekerja bebas'], ['sendiri', 'Berusaha sendiri'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+const split = (arr: readonly number[]) => ['a', 'b', 'd', 'e'].map((c, i) => ({ c, w: arr[i] }));
+const lbl = ['< Rp1 juta', 'Rp1–1,99 juta', 'Rp2–2,99 juta', '≥ Rp3 juta'];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statistik Pendapatan Februari 2026 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Statistik Pendapatan Februari 2026 (BPS, Sakernas): pendapatan 13,60 juta pekerja bebas dan 30,37 juta berusaha sendiri." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Hampir dua pertiga pekerja mandiri berpendapatan di bawah Rp2 juta</h1>
+  <p class="lead">Pada Februari 2026, 63,4% dari 30,37 juta orang yang berusaha sendiri dan 63,7% dari 13,60 juta pekerja bebas berpendapatan di bawah Rp2 juta sebulan. Tidak ada UMP yang melindungi mereka.</p>
+  <p class="src">Statistik Pendapatan Februari 2026 · BPS, Sakernas · rata-rata pendapatan bersih sebulan, juta rupiah (buruh dari laporan Keadaan Pekerja)</p>
+  <div class="growth" role="img" aria-label="Rata-rata pendapatan bulanan menurut status pekerjaan">
+    {hero.map(([l, v], i) => <div class="col"><div class="n">{n(v)}</div><div class="bar" style={`--h:${(v / 3.29) * 82}%;--i:${i}`}></div><div class="y">{l}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Laporan ini melengkapi Keadaan Pekerja dengan dua status yang tidak mendapat upah: pekerja bebas dan berusaha sendiri.</p></header>
+  <dl class="kf">
+    <div><dt>43,97 juta</dt><dd>pekerja: 13,60 juta pekerja bebas dan 30,37 juta berusaha sendiri (2,2 kali lipat). Bersama 54,62 juta buruh/karyawan, ketiganya mencakup 98,6 juta orang.</dd></div>
+    <div><dt>Rp1,92 juta</dt><dd>rata-rata pendapatan berusaha sendiri, lebih tinggi dari pekerja bebas (Rp1,68 juta) tetapi jauh di bawah upah buruh (Rp3,29 juta).</dd></div>
+    <div><dt>34,79%</dt><dd>berusaha sendiri berpendapatan di bawah Rp1 juta; pekerja bebas 28,78%. Namun 20,52% berusaha sendiri mencapai Rp3 juta ke atas, dibanding 14,02% pekerja bebas.</dd></div>
+    <div><dt>46,0%</dt><dd>berusaha sendiri di DKI Jakarta berpendapatan ≥Rp3 juta, jauh di atas rata-rata nasional 20,52%.</dd></div>
+    <div><dt>3,73 vs 1,75</dt><dd>rata-rata pendapatan berusaha sendiri kerah putih dibanding kerah biru (juta rupiah): jarak 2,1 kali.</dd></div>
+    <div><dt>3,74 vs 1,09</dt><dd>rata-rata pendapatan pekerja bebas tertinggi (Papua Tengah) dan terendah (NTT), juta rupiah.</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="distribusi"><div class="wrap grid">
+  <header><h2>Distribusi pendapatan</h2><p>Persentase pekerja menurut kelompok pendapatan bersih sebulan.</p></header>
+  <div>
+    {J.dist.map((d) => <div><h3>{d[0]} ({n(d[1])} juta)</h3>
+      <div class="split" role="img" aria-label={`Distribusi pendapatan ${d[0]}`}>{split(d[2]).map((s) => <span class={s.c} style={`width:${s.w}%`}>{n(s.w, 1)}%</span>)}</div></div>)}
+    <p class="legend">Urutan kiri ke kanan: {lbl.join(', ')}.</p>
+    <p class="note">Sebaran berusaha sendiri lebih lebar: lebih banyak di kelompok terbawah (34,79%) dan teratas (20,52%) dibanding pekerja bebas yang menumpuk di Rp1–1,99 juta (34,95%). Pekerja bebas 42,1% bekerja di pertanian, sedangkan berusaha sendiri 56,0% di jasa. Berusaha sendiri tersebar di Jawa Barat (5,62 juta), Jawa Timur (4,92 juta), dan Jawa Tengah (4,53 juta), sekitar separuh (49,6%) dari seluruhnya.</p>
+  </div>
+</div></section>
+
+<section class="s" id="bebas"><div class="wrap grid">
+  <header><h2>Pekerja bebas</h2><p>Rata-rata Rp1,68 juta per bulan. Tertinggi industri (Rp2,05 juta), terendah pertanian (Rp1,34 juta).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Karakteristik</th><th>Pekerja (juta)</th><th>&lt; Rp1 juta (%)</th><th>≥ Rp3 juta (%)</th><th>Rata-rata (jt)</th></tr></thead><tbody>
+    {groups.map((g) => [<tr><td colspan="5"><b>{g}</b></td></tr>, ...J.casual.filter((r) => r[0] === g).map((r) => <tr><td>{r[1]}</td><td>{n(r[2])}</td><td class={r[3] > 40 ? 'lo' : ''}>{n(r[3], 1)}</td><td>{n(r[4], 1)}</td><td><b>{n(r[5])}</b></td></tr>)])}
+  </tbody></table>
+  <p class="note">Jam kerja menentukan pendapatan: pekerja bebas dengan 1–24 jam per minggu 56,18% berpendapatan di bawah Rp1 juta. Cerai mati paling rentan (52,49% di bawah Rp1 juta). Kerah putih hanya 285 ribu orang tetapi berpendapatan tertinggi (Rp2,32 juta).</p></div>
+</div></section>
+
+<section class="s alt" id="sendiri"><div class="wrap grid">
+  <header><h2>Berusaha sendiri</h2><p>Rata-rata Rp1,92 juta. Tertinggi jasa (Rp2,12 juta), terendah pertanian (Rp1,57 juta).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Karakteristik</th><th>Pekerja (juta)</th><th>&lt; Rp1 juta (%)</th><th>≥ Rp3 juta (%)</th><th>Rata-rata (jt)</th></tr></thead><tbody>
+    {groups.map((g) => [<tr><td colspan="5"><b>{g}</b></td></tr>, ...J.own.filter((r) => r[0] === g).map((r) => <tr><td>{r[1]}</td><td>{n(r[2])}</td><td class={r[3] > 40 ? 'lo' : ''}>{n(r[3], 1)}</td><td class={r[4] > 28 ? 'hi' : ''}>{n(r[4], 1)}</td><td><b>{n(r[5])}</b></td></tr>)])}
+  </tbody></table>
+  <h3>Jam kerja dan rata-rata pendapatan (juta rupiah)</h3>
+  <table class="cmp"><thead><tr><th>Jam kerja per minggu</th><th>Pekerja bebas</th><th>Berusaha sendiri</th></tr></thead><tbody>
+    {J.hours.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2])}</td></tr>)}
+  </tbody></table>
+  <p class="note">Pendapatan naik hingga 41–48 jam lalu menurun pada 49 jam ke atas, baik untuk pekerja bebas maupun berusaha sendiri. Lulusan SMA ke atas (37,0% dari berusaha sendiri) berpendapatan Rp2,42 juta, hampir dua kali lulusan belum tamat SD (Rp1,37 juta). Kelompok 55+ tahun (30,0%) 46,33% berpendapatan di bawah Rp1 juta, dan cerai mati (3,59 juta orang) 51,1%.</p></div>
+</div></section>
+
+<section class="s" id="provinsi"><div class="wrap grid">
+  <header><h2>38 provinsi</h2><p>Diurutkan menurut rata-rata pendapatan berusaha sendiri.</p></header>
+  <div class="tw" style="max-height:600px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>Berusaha sendiri (jt)</th><th>Pekerja bebas (jt)</th><th>Pekerja sendiri (juta)</th><th>&lt; Rp1 juta sendiri (%)</th><th>≥ Rp3 juta sendiri (%)</th></tr></thead><tbody>
+    {J.prov.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[2])}</b></td><td>{n(r[1])}</td><td>{n(r[4])}</td><td>{n(r[6], 1)}</td><td>{n(r[7], 1)}</td></tr>)}
+  </tbody></table></div>
+  <p class="note" style="grid-column:2">Berusaha sendiri tertinggi di DKI Jakarta (Rp3,53 juta), Banten (Rp2,80 juta), Bali (Rp2,75 juta); terendah NTT (Rp1,19 juta) dan Sulawesi Barat (Rp1,37 juta). Pekerja bebas tertinggi di Papua Tengah (Rp3,74 juta), Kalimantan Tengah (Rp2,82 juta), Papua (Rp2,80 juta). Di Papua Tengah pekerja bebas berpendapatan 1,8 kali pekerja mandiri, sedangkan di Banten berusaha sendiri 1,5 kali pekerja bebas.</p>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Pendapatan, bukan upah.</b>Untuk pekerja bebas dan berusaha sendiri BPS memakai istilah pendapatan bersih; tidak ada UMP atau standar negosiasi bagi kedua status ini.</li>
+    <li><b>Cakupan.</b>Hanya dua dari beberapa status pekerjaan. Berusaha dibantu buruh dan pekerja keluarga tidak dicakup, jadi angka 98,6 juta bukan total penduduk bekerja.</li>
+    <li><b>Selisih kecil narasi dan tabel.</b>Beberapa persentase berusaha sendiri dalam narasi berbeda 0,1–0,3 poin dari hitungan tabel (mis. pertanian 45,80% vs 45,70%); halaman ini memakai tabel.</li>
+    <li><b>Sampel dan RSE.</b>Sakernas Februari 2026 mencakup 76.858 rumah tangga (99,30% dari target). Sel bertanda H (RSE 25–50%) perlu hati-hati dan NA berarti tidak ditampilkan, terutama untuk provinsi kecil.</li>
+    <li><b>Judul tabel tidak terbaca.</b>Judul dan label baris banyak tabel tidak ada di teks PDF; urutan kategori saya cocokkan dengan narasi dan angka total.</li>
+    <li><b>Nominal.</b>Tanpa penyesuaian harga dan tanpa data tahun sebelumnya.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendapatan Februari 2026</em>, Volume 13 No. 1 (katalog 5204003, ISSN 2598-5639). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
