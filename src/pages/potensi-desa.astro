@@ -1,0 +1,132 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { prov } from '../data/podes';
+const N = 84139, D = 75653;
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const p = (rows: [string, number][], d = N) => rows.map(([label, c]) => ({ label, value: (c / d) * 100 }));
+const hero = [['Sinyal seluler', 96.77], ['Internet 4G', 87.97], ['Ada BTS', 57.26], ['Angkutan online', 26.24], ['Ada bank', 12.33]] as const;
+const nav = [['ringkasan', 'Ringkasan'], ['wilayah', 'Wilayah'], ['dasar', 'Infrastruktur dasar'], ['digital', 'Digital'], ['ekonomi', 'Ekonomi'], ['layanan', 'Pendidikan dan kesehatan'], ['pemerintah', 'Pemerintahan'], ['lingkungan', 'Lingkungan dan bencana'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+const mata: [string, number][] = [['Pertanian', 67732], ['Jasa', 10427], ['Industri', 5980]];
+const tani: [string, number][] = [['Tanaman pangan', 38148], ['Perkebunan', 21336], ['Hortikultura', 3674], ['Perikanan', 3646], ['Kehutanan', 343], ['Peternakan', 318], ['Jasa pertanian', 267]];
+const dasar: [string, number][] = [['Ada penerangan jalan listrik', 69976], ['Tanpa penerangan jalan', 13460], ['Ada agen LPG', 68875], ['Mayoritas keluarga memasak dengan kayu bakar', 14067], ['Ada angkutan umum', 67076], ['Tanpa angkutan umum', 17063], ['Ada angkutan online', 22080]];
+const digital: [string, number][] = [['Sinyal seluler sangat kuat/kuat', 70151], ['Sinyal seluler lemah', 11267], ['Tidak ada sinyal seluler', 2721], ['Internet 4G/LTE', 74014], ['Internet 3G', 4760], ['Internet 2,5G', 1896], ['Tidak ada sinyal internet', 3469], ['Ada BTS', 48179], ['Layanan ekspedisi swasta', 14100], ['Kantor pos/rumah pos', 6491]];
+const eko: [string, number][] = [['Warga menerima KUR', 63609], ['Ada industri mikro dan kecil', 67628], ['Punya produk unggulan', 25679], ['Ada kelompok pertokoan', 12866], ['Ada minimarket', 23007], ['Ada koperasi simpan pinjam', 15612], ['Warga menerima KUK', 11643], ['Warga menerima KUBE', 9859], ['Ada bank', 10371]];
+const sarana: [string, number][] = [['TK/RA', 57440], ['SD/MI', 72490], ['SMP/MTs', 39175], ['SMA/MA', 18477], ['SMK', 11014], ['Akademi/perguruan tinggi', 3233]];
+const sehat: [string, number][] = [['Posyandu', 80134], ['Praktik bidan', 37075], ['Poskesdes', 33886], ['Pustu', 24815], ['Apotek', 18998], ['Praktik dokter', 16948], ['Polindes', 10450], ['Puskesmas', 10254], ['Rumah sakit', 2802]];
+const desa: [string, number][] = [['Ada Peraturan Desa 2024', 70524], ['Ada tanah kas desa', 63544], ['Ada sistem keuangan desa', 70221], ['Ada BUMDes', 56877], ['Ada sistem informasi desa', 57701], ['Sistem informasi desa diperbarui', 50255]];
+const bencana: [string, number][] = [['Banjir', 15398], ['Gempa bumi', 11477], ['Tanah longsor', 6754], ['Angin puyuh/puting beliung', 3904], ['Kekeringan', 1853], ['Gelombang pasang', 1285], ['Kebakaran hutan/lahan', 749], ['Banjir bandang', 707], ['Abrasi', 714], ['Gunung meletus', 433]];
+const iklim: [string, number][] = [['Gangguan kesehatan (pneumonia, malaria, DBD)', 31122], ['Kesulitan bertani/melaut', 25224], ['Gagal panen', 22141], ['Kelangkaan air', 19073], ['Kerusakan rumah/harta benda', 12430], ['Kehilangan mata pencaharian', 9995]];
+const keg: [string, number][] = [['Pupuk organik', 35785], ['Pola tanam adaptif', 31533], ['Penanaman pohon/mangrove', 16129], ['Penampungan air hujan', 13532], ['Pengolahan sampah/daur ulang', 11777], ['Energi terbarukan', 9007], ['Terasering', 7573], ['Lubang biopori', 4891]];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statistik Potensi Desa 2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Podes 2025 (BPS): infrastruktur, digital, ekonomi, pemerintahan, lingkungan, dan bencana di 84.139 desa/kelurahan." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Sinyal 4G sudah menjangkau 88% desa, tetapi hanya 12% desa punya bank</h1>
+  <p class="lead">Podes 2025 mencatat 84.291 desa, kelurahan, dan permukiman transmigrasi. Jaringan telepon sudah hampir merata, sedangkan layanan keuangan formal dan transportasi masih tertinggal, terutama di Papua pedalaman.</p>
+  <p class="src">Statistik Potensi Desa Indonesia 2025 · BPS, Volume 16 · persen desa/kelurahan yang memiliki, pendataan Juni 2025</p>
+  <div class="growth" role="img" aria-label="Persentase desa/kelurahan menurut ketersediaan infrastruktur">
+    {hero.map(([l, v], i) => <div class="col"><div class="n">{n(v, 1)}%</div><div class="bar" style={`--h:${v * 0.82}%;--i:${i}`}></div><div class="y">{l}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Sensus seluruh wilayah setingkat desa. Persentase di halaman ini dihitung dari 84.139 desa/kelurahan yang berhasil didata, kecuali disebut lain.</p></header>
+  <dl class="kf">
+    <div><dt>84.291</dt><dd>wilayah setingkat desa: 75.774 desa, 8.486 kelurahan, dan 31 UPT/SPT. Sebanyak 84.139 (99,82%) berhasil didata, 152 tidak karena kendala keamanan.</dd></div>
+    <div><dt>80,5%</dt><dd>desa/kelurahan (67.732) mayoritas penduduknya bekerja di pertanian; 12,4% di jasa dan 7,1% di industri.</dd></div>
+    <div><dt>87,67%</dt><dd>desa/kelurahan tidak memiliki bank. Namun 75,60% warganya menerima Kredit Usaha Rakyat (KUR).</dd></div>
+    <div><dt>16,00%</dt><dd>desa/kelurahan tanpa penerangan jalan; di Papua Pegunungan 95,4%. Kayu bakar masih bahan bakar utama di 16,72% desa.</dd></div>
+    <div><dt>39,10%</dt><dd>desa/kelurahan mengalami bencana alam pada Januari 2024–Mei 2025, terbanyak banjir (15.398 desa) dan gempa bumi (11.477).</dd></div>
+    <div><dt>90,5%</dt><dd>desa/kelurahan memiliki kepala desa/lurah (76.171). Hanya 6,75% di antaranya perempuan, sedangkan sekretaris desa 15,76%.</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="wilayah"><div class="wrap grid">
+  <header><h2>Wilayah dan mata pencaharian</h2><p>Pertanian adalah ekonomi mayoritas desa.</p></header>
+  <div>
+    <h3>Sumber penghasilan utama mayoritas penduduk (% desa/kelurahan)</h3><Bars items={p(mata)} />
+    <h3>Subsektor pertanian (% dari 67.732 desa pertanian)</h3><Bars items={p(tani, 67732)} tone="ink" />
+    <p class="note">Tanaman pangan dominan (56,3%), disusul perkebunan (31,5%). Sebanyak 28,25% desa/kelurahan berada di dalam atau tepi hutan (3.038 di dalam hutan, 20.732 di tepi), dan 15,38% berada di tepi laut. Wilayah administrasi: 514 kabupaten/kota dan 7.288 kecamatan. Permukiman transmigrasi (31 UPT/SPT) tersebar di provinsi tertentu.</p>
+  </div>
+</div></section>
+
+<section class="s" id="dasar"><div class="wrap grid">
+  <header><h2>Infrastruktur dasar</h2><p>Listrik hampir merata, tetapi penerangan jalan, energi memasak, dan angkutan umum belum.</p></header>
+  <div>
+    <Bars items={p(dasar)} />
+    <p class="note">Keluarga pengguna listrik PLN ada di 92,36% desa/kelurahan, tetapi 16,46% desa/kelurahan (13.852) masih memiliki keluarga yang tidak memakai listrik. Penerangan jalan utama bersumber dari listrik pemerintah di 70,41% desa. Jalan utama darat beraspal/beton di 83,2% desa pengguna jalan darat, perkerasan kerikil/batu 10,4%, tanah 5,7%. Prasarana transportasi: darat di 91,7% desa, air di 1,8%, kombinasi darat dan air 6,5%.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="digital"><div class="wrap grid">
+  <header><h2>Digital dan komunikasi</h2><p>Sinyal luas, infrastruktur BTS belum.</p></header>
+  <div>
+    <Bars items={p(digital)} tone="ink" top={false} />
+    <p class="note">Sebanyak 96,77% desa/kelurahan memiliki sinyal telepon seluler, tetapi 13,39% sinyalnya lemah dan 3,23% (2.721) tidak ada sinyal. Internet 4G menjangkau 87,97% desa, sedangkan 4,12% (3.469) tanpa sinyal internet. BTS ada di 57,26% desa. Layanan ekspedisi swasta ada di 16,76% desa, lebih banyak daripada kantor/rumah pos (7,71%).</p>
+  </div>
+</div></section>
+
+<section class="s" id="ekonomi"><div class="wrap grid">
+  <header><h2>Ekonomi dan keuangan</h2><p>Kredit mikro menjangkau hampir semua desa, bank formal belum.</p></header>
+  <div>
+    <Bars items={p(eko)} tone="sun" top={false} />
+    <p class="note">Hanya 12,33% desa memiliki bank: bank pemerintah di 9,78%, bank swasta 3,01%, BPR 5,18% (satu desa bisa punya lebih dari satu jenis). Pasar dan pertokoan juga jarang: 67,3% desa tidak memiliki kelompok pertokoan maupun pasar; pasar bangunan permanen ada di 10,16%, semipermanen 11,82%, tanpa bangunan 9,40%. Industri mikro/kecil ada di 80,38% desa dan sentra industri di 6,69%. Total fasilitas: 75.126 minimarket, 85.120 restoran/rumah makan, 14.225 hotel, 44.574 penginapan, 35.333 kelompok pertokoan.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="layanan"><div class="wrap grid">
+  <header><h2>Pendidikan dan kesehatan</h2><p>Persentase desa/kelurahan yang memiliki sarana.</p></header>
+  <div>
+    <h3>Sarana pendidikan</h3><Bars items={p(sarana)} />
+    <p class="note">Jumlah satuan: SD 149.227 dan MI 28.504; SMP 43.178 dan MTs 20.023; SMA 15.360 dan MA 10.431; SMK 14.661; akademi/perguruan tinggi 4.683 (679 negeri, 4.004 swasta). Di tiap jenjang madrasah mayoritas swasta (MI 93,5%, MA 91,6%). Angka sekolah ini sedikit berbeda dari Statistik Pendidikan 2025 (mis. SMA 14.675) karena sumber dan cakupannya berbeda.</p>
+    <h3>Sarana kesehatan</h3><Bars items={p(sehat)} tone="ink" top={false} />
+    <p class="note">Rumah sakit 3.369 (Jawa Barat terbanyak, 468), puskesmas 10.504 (4.819 dengan rawat inap), klinik pratama 16.497, klinik utama 2.152. Praktik bidan 72.741 dan praktik dokter 41.409 menjadi tulang punggung layanan primer; apotek 45.396. Posyandu ada di 95,24% desa.</p>
+  </div>
+</div></section>
+
+<section class="s" id="pemerintah"><div class="wrap grid">
+  <header><h2>Pemerintahan desa</h2><p>Persentase dari 75.653 desa (kelurahan dikecualikan).</p></header>
+  <div>
+    <Bars items={p(desa, D)} />
+    <p class="note">Perangkat: kepala desa/lurah ada di 76.171 wilayah (90,5%), sekretaris di 81.336 (96,7%), pelaksana kewilayahan 68.955 (82,0%), pelaksana teknis 81.263 (96,6%). Perempuan 5.138 kepala desa/lurah (6,75%) dan 12.814 sekretaris (15,76%). Sekretaris berusia 25–44 tahun 63,4%, di bawah 25 hanya 0,9%. Pendidikan kepala desa/lurah: SMA 56,4%, D4/S1 30,4%, S2 4,4%; sekretaris S1 41,7%, diploma III 4,9%.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="lingkungan"><div class="wrap grid">
+  <header><h2>Lingkungan dan bencana</h2><p>Persentase desa/kelurahan.</p></header>
+  <div>
+    <h3>Bencana alam Januari 2024 – Mei 2025</h3><Bars items={p(bencana)} tone="ink" />
+    <p class="note">60,90% desa tidak mengalami bencana; 39,10% mengalami minimal satu. Hanya 14,50% desa memiliki sistem peringatan dini bencana, 14,08% perlengkapan keselamatan, dan 13,85% rambu evakuasi.</p>
+    <h3>Dampak perubahan iklim yang dirasakan</h3><Bars items={p(iklim)} tone="sun" />
+    <h3>Kegiatan adaptasi dan mitigasi</h3><Bars items={p(keg)} />
+    <p class="note">Pencemaran air terjadi di 9,64% desa, udara 5,89%, tanah 1,48%; 86,58% tanpa pencemaran. Sumber pencemaran air terutama pabrik/industri/usaha (3.920 desa) dan rumah tangga (3.487); udara terutama pabrik (2.803). Kendaraan roda empat bertambah di 62,75% desa, pupuk kimia/pestisida meningkat di 43,93%, pembakaran sampah di 21,46%. Perkelahian massal terjadi di 2,43% desa (2.046), dengan korban meninggal di 176 desa dan luka-luka di 1.231.</p>
+  </div>
+</div></section>
+
+<section class="s" id="provinsi"><div class="wrap grid">
+  <header><h2>Provinsi tertinggi dan terendah</h2><p>Persentase desa/kelurahan per provinsi (2025).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>Nasional (%)</th><th>Tertinggi</th><th>Terendah</th></tr></thead><tbody>
+    {prov.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1])}</b></td><td class="hi">{r[2]}</td><td class="lo">{r[3]}</td></tr>)}
+  </tbody></table>
+  <p class="note">Papua Pegunungan dan Papua Tengah di dasar hampir semua indikator infrastruktur: 95,4% desa tanpa penerangan jalan, 99,2% memasak dengan kayu bakar, 99,4% tanpa bank, dan 56,1% tanpa sinyal internet. DKI Jakarta unggul di digital dan transportasi (angkutan online 97,8%, 4G 100%), sedangkan Aceh paling sedikit memiliki bank (96,2% desa tanpa bank). Kalimantan Utara dan DKI Jakarta paling sering banjir.</p></div>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Unit data.</b>Semua angka adalah jumlah desa/kelurahan yang memiliki sesuatu, bukan jumlah fasilitas atau penduduk. Satu desa bisa tercatat pada beberapa kategori.</li>
+    <li><b>Penyebut.</b>Persentase dihitung dari 84.139 desa/kelurahan (atau 75.653 desa untuk pemerintahan desa). Beberapa tabel punya penyebut berbeda; urutan kolom beberapa tabel (mis. bank dan angkutan umum) saya tafsirkan dari header dan jumlah total.</li>
+    <li><b>Tidak ada narasi analitis.</b>Publikasi ini hampir sepenuhnya tabel dan definisi, jadi semua interpretasi di halaman ini berasal dari hitungan saya, bukan dari BPS.</li>
+    <li><b>Data cacah.</b>Sebanyak 152 desa/kelurahan (0,18%) tidak berhasil didata karena kendala keamanan dan faktor lain; tabel provinsi Papua, Papua Tengah, dan Papua Pegunungan memuat catatan kaki khusus.</li>
+    <li><b>Bencana.</b>Periode pencatatan 17 bulan; dua indikator pencemaran dan iklim berbasis laporan aparat desa, bukan pengukuran.</li>
+    <li><b>Cakupan analisis.</b>Tabel menurut provinsi lebih rinci (mis. jenis pengolahan sampah, perkelahian massal, penyelesaian sengketa) tidak diulas semuanya.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Potensi Desa Indonesia 2025</em>, Volume 16 (ISSN 2714-8521). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
