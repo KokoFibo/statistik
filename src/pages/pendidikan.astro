@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { J } from '../data/pendidikan';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const hero = [['7–12 th', 99.23], ['13–15 th', 96.3], ['16–18 th', 77.86], ['19–23 th', 29.13]] as const;
+const nav = [['ringkasan', 'Ringkasan'], ['sekolah', 'Sekolah dan guru'], ['partisipasi', 'Partisipasi'], ['kesenjangan', 'Kesenjangan'], ['capaian', 'Capaian'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+const yr = ['2021', '2022', '2023', '2024', '2025'];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statistik Pendidikan 2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Statistik Pendidikan 2025 (BPS): sekolah, guru, APS, APK, APM, anak tidak sekolah, dan capaian pendidikan." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Hampir semua anak SD bersekolah, tapi hanya 29 dari 100 usia kuliah</h1>
+  <p class="lead">Angka partisipasi sekolah turun tajam seiring usia. Anak tidak sekolah usia 16–18 tahun menurun 3,82 poin menjadi 15,38%, tetapi di Papua Tengah masih 53,37%.</p>
+  <p class="src">Statistik Pendidikan 2025 · BPS, Volume 14 · Angka Partisipasi Sekolah (APS) 2025, persen</p>
+  <div class="growth" role="img" aria-label="Angka partisipasi sekolah 2025 menurut kelompok umur">
+    {hero.map(([l, v], i) => <div class="col"><div class="n">{n(v)}%</div><div class="bar" style={`--h:${v * 0.82}%;--i:${i}`}></div><div class="y">{l}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Sekolah dan guru dari Kemendikdasmen 2024/2025; partisipasi dan capaian dari Susenas Maret 2025.</p></header>
+  <dl class="kf">
+    <div><dt>9,41 tahun</dt><dd>rata-rata lama sekolah penduduk 15+, naik dari 9,22 pada 2024 dan melampaui target RPJMN 9,33. DKI Jakarta 11,58 tahun, Papua Pegunungan 4,76 tahun.</dd></div>
+    <div><dt>67,44%</dt><dd>APM SMA/SMK, naik 3,12 poin dari 2024 (64,32%) dan 5,79 poin sejak 2021. APM SD (97,00%) dan SMP (80,65%) justru turun.</dd></div>
+    <div><dt>97,65 → 73,90%</dt><dd>penyelesaian SD, SMP (91,45%), lalu SMA/SMK: semakin tinggi jenjang, semakin banyak yang tidak menyelesaikan.</dd></div>
+    <div><dt>36,19%</dt><dd>APK PAUD anak 3–6 tahun, masih di bawah 2023 (36,36%). Anak 0–6 tahun yang pernah/sedang prasekolah 34,15%.</dd></div>
+    <div><dt>39,68%</dt><dd>ruang kelas SD dalam kondisi baik; 10,81% rusak berat. Sebanyak 18,76% SD tidak punya toilet siswa.</dd></div>
+    <div><dt>83,80% vs 19,80%</dt><dd>peserta didik 5–23 tahun memakai internet dibanding komputer/laptop.</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="sekolah"><div class="wrap grid">
+  <header><h2>Sekolah dan guru</h2><p>Tahun ajaran 2024/2025.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Jenjang</th><th>Sekolah</th><th>Negeri (%)</th><th>Kelas baik (%)</th><th>Rusak berat (%)</th><th>Murid/rombel</th><th>Rombel/kelas</th><th>Air cukup (%)</th><th>Tanpa toilet (%)</th><th>Guru</th><th>S1/D4 (%)</th><th>Murid/guru</th></tr></thead><tbody>
+    {J.schools.map((r) => <tr><td><b>{r[0]}</b></td><td>{n(r[1], 0)}</td><td>{n(r[2])}</td><td class={r[3] < 45 ? 'lo' : ''}>{n(r[3])}</td><td>{n(r[4])}</td><td>{r[5]}</td><td>{n(r[6])}</td><td>{n(r[7])}</td><td>{n(r[8])}</td><td>{n(r[9], 0)}</td><td>{n(r[10])}</td><td>{r[11]}</td></tr>)}
+  </tbody></table>
+  <p class="note">Jumlah sekolah naik pada semua jenjang (SMP +550, SD +276, SMA +230, SMK +73). SD dan SMP didominasi sekolah negeri, SMA dan SMK didominasi swasta (SMK 73,65%). Ruang kelas cukup: rombel per kelas di bawah 1 di semua jenjang. Guru SD, SMP, dan SMA bertambah (SD +20.403), tetapi guru SMK turun 2.409. Semua rasio murid-guru memenuhi standar (maksimal 20 untuk SD–SMA, 15 untuk SMK).</p></div>
+</div></section>
+
+<section class="s" id="partisipasi"><div class="wrap grid">
+  <header><h2>Partisipasi 2021–2025</h2><p>Hampir semua indikator naik pada 2025; APM SD dan SMP turun.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th>{yr.map((y) => <th>{y}</th>)}</tr></thead><tbody>
+    {J.trend.map((r) => <tr><td>{r[0]}</td>{r[1].map((v, i) => <td class={i === 4 ? 'hi' : ''}>{n(v)}</td>)}</tr>)}
+  </tbody></table>
+  <p class="note">APK perguruan tinggi 32,89% belum mencapai target RPJMN 2025 (33,94%). APK PAUD baru kembali ke 36,19% dan masih di bawah 2023. Angka Kesiapan Sekolah naik terus sejak 2022 menjadi 80,29%. Partisipasi anak usia 6 tahun dalam pembelajaran terorganisir 97,70%.</p></div>
+</div></section>
+
+<section class="s alt" id="kesenjangan"><div class="wrap grid">
+  <header><h2>Kesenjangan</h2><p>Nilai 2025 menurut karakteristik demografi (%).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>Nasional</th><th>Laki-laki</th><th>Perempuan</th><th>Nondisabilitas</th><th>Disabilitas</th><th>Kuintil 5</th><th>Kuintil 1</th><th>Kota</th><th>Desa</th></tr></thead><tbody>
+    {J.gap.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1])}</b></td><td>{n(r[2][0])}</td><td>{n(r[2][1])}</td><td>{n(r[3][0])}</td><td class="lo">{n(r[3][1])}</td><td>{n(r[4][0])}</td><td>{n(r[4][1])}</td><td>{n(r[5][0])}</td><td>{n(r[5][1])}</td></tr>)}
+  </tbody></table>
+  <p class="note">Disabilitas adalah kesenjangan terlebar: APS 16–18 tahun 40,54% (nondisabilitas 78,18%), dan penyelesaian SMA hanya 24,95%. Antarkuintil, APM perguruan tinggi kuintil 5 mencapai 39,01% dibanding 11,79% di kuintil 1. Perempuan unggul di partisipasi (APK PT 35,98% vs 29,88%), sedangkan laki-laki lebih banyak putus sekolah (SMA/SMK 0,94% vs 0,78%).</p>
+  <h3>Alasan utama tidak bersekolah (%)</h3>
+  <table class="cmp"><thead><tr><th>Alasan</th><th>7–12</th><th>13–15</th><th>16–18</th><th>19–23</th></tr></thead><tbody>
+    {J.reasons.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td>{n(r[2])}</td><td>{n(r[3])}</td><td>{n(r[4])}</td></tr>)}
+  </tbody></table>
+  <p class="note">Kolom 7–12 berisi anak yang masih prasekolah (42,26%). NA berarti data tidak ditampilkan.</p></div>
+</div></section>
+
+<section class="s" id="capaian"><div class="wrap grid">
+  <header><h2>Capaian pendidikan</h2><p>Pendidikan tertinggi penduduk 15+ dan alur pendidikan usia 19–21 tahun.</p></header>
+  <div>
+    <h3>Pendidikan tertinggi yang ditamatkan (%)</h3><Bars items={J.attain.map((r) => ({ label: r[0], value: r[1] }))} tone="ink" top={false} />
+    <p class="note">64,74% penduduk 15+ tamat SMP atau lebih, tetapi 11,37% tidak/belum pernah sekolah atau tidak tamat SD. Di perdesaan 47,23% maksimal tamat SD; tamatan perguruan tinggi 14,33% di kota dan 6,03% di desa. Penyandang disabilitas 73,77% maksimal tamat SD. Melek huruf 97,10% (15+), laki-laki 98,18% dan perempuan 96,03%, tetapi usia 15–24 tahun 99,83%.</p>
+    <h3>Alur pendidikan penduduk 19–21 tahun (%)</h3><Bars items={J.flow.map((r) => ({ label: r[0], value: r[1] }))} />
+    <p class="note">Sebanyak 3,81% tidak melanjutkan ke SMP dan 11,55% tidak melanjutkan ke SMA/SMK. Penyelesaian SMA/SMK (71,01%) adalah titik hilang terbesar. Putus sekolah: SD 0,09%, SMP 0,54%, SMA/SMK 0,86%, dan lebih tinggi di perdesaan serta pada laki-laki.</p>
+    <h3>Peserta didik dan TIK</h3>
+    <p class="t">Di antara peserta didik 5–23 tahun, 85,78% memakai ponsel dan 83,80% internet, tetapi komputer/laptop hanya 19,80% (perguruan tinggi 64,24%, SD 5,00%). Tujuan internet: hiburan 92,19%, media sosial 68,88%, informasi 68,22%, pembelajaran online 33,40%. Peserta didik 10–23 tahun yang mengurus rumah tangga 40,76% (perempuan 46,80%, laki-laki 34,76%) dan yang bekerja 7,27%; di perguruan tinggi 30,55% bekerja.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="provinsi"><div class="wrap grid">
+  <header><h2>Provinsi tertinggi dan terendah</h2><p>Dua provinsi tertinggi dan terendah per indikator, 2025.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>Nasional</th><th>Tertinggi</th><th>Terendah</th></tr></thead><tbody>
+    {J.prov.map((r) => <tr><td>{r[0]}</td><td>{n(r[1])}</td><td class="hi">{r[2]}</td><td class="lo">{r[3]}</td></tr>)}
+  </tbody></table>
+  <p class="note">Papua Tengah dan Papua Pegunungan di dasar hampir semua indikator: 46,25% penduduk 15+ di Papua Pegunungan tidak pernah sekolah, dan melek hurufnya 68,32%. DI Yogyakarta memimpin hampir semua indikator partisipasi dan penyelesaian. Semua provinsi di pulau Papua berada di bawah angka nasional untuk penyelesaian pendidikan. Sebanyak 20 provinsi memiliki RLS di atas nasional.</p></div>
+</div></section>
+
+<section class="s" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Dua sumber.</b>Data sekolah dan guru dari Kemendikdasmen (tahun ajaran 2024/2025); partisipasi dan capaian dari Susenas Maret 2025. Keduanya tidak sepenuhnya sebanding.</li>
+    <li><b>Salah ketik di ringkasan.</b>Ringkasan menyebut guru SD, SMP, dan SMK naik tetapi SMK turun; tabel menunjukkan yang turun hanya SMK. Angka RLS 2024 ditulis "9,22 persen" padahal tahun.</li>
+    <li><b>Prasekolah tampak berbeda.</b>Anak 0–6 tahun yang pernah/sedang prasekolah lebih tinggi di desa (35,27%) daripada kota (33,37%), sedangkan APK PAUD 3–6 tahun lebih tinggi di kota (37,55% vs 34,25%). Penyebabnya perbedaan penyebut kedua indikator.</li>
+    <li><b>Sampling error.</b>Publikasi memuat tabel RSE (Susenas); angka Papua Tengah dan Papua Pegunungan perlu dicek ke tabel tersebut. NA berarti data tidak ditampilkan.</li>
+    <li><b>Grafik tren.</b>Nilai 2021–2025 dibaca dari label grafik; nilai peringkat provinsi dari tabel Lampiran. Rata-rata lama sekolah menurut provinsi di publikasi hanya berupa peta.</li>
+    <li><b>Cakupan.</b>Tabel sampling error (sekitar 40 tabel) dan lampiran tidak diulas.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendidikan 2025</em>, Volume 14 (ISSN 2086-4566). Angka dihitung dari tabel dan grafik PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
