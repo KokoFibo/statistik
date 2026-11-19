@@ -1,0 +1,117 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { ext, tab } from '../data/telekom';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const hero = [['RT punya HP', 93.5], ['RT pernah akses internet', 91.66], ['Penduduk akses internet', 77.63], ['Penduduk punya HP', 70.75], ['RT punya komputer', 19.94]] as const;
+const nav = [['ringkasan', 'Ringkasan'], ['akses', 'Akses dan perangkat'], ['pengguna', 'Pengguna'], ['jaringan', 'Jaringan'], ['operator', 'Operator'], ['ekonomi', 'Ekonomi TIK'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+const trend: [string, number[]][] = [['Penduduk akses internet: kota', [74.16, 76.3, 79.13, 82.72]], ['Penduduk akses internet: desa', [55.92, 59.33, 63.71, 70.14]], ['Penduduk akses internet: total', [66.48, 69.21, 72.78, 77.63]], ['Penduduk punya HP', [67.88, 67.29, 68.65, 70.75]], ['Penduduk pakai komputer', [11.88, 12.3, 12.23, 12.99]], ['RT punya HP', [92.35, 89.02, 92.92, 93.5]], ['RT pernah akses internet', [86.54, 87.09, 89.76, 91.66]], ['RT punya komputer', [18.04, 18.06, 18.52, 19.94]], ['RT punya telepon tetap', [1.34, 1.17, 0.99, 0.61]], ['RT berbelanja telekomunikasi', [92.7, 91.9, 93.16, 93.69]]];
+const lokasi = [['Rumah sendiri', 98.23], ['Tempat umum', 54.28], ['Bukan rumah sendiri', 42.64], ['Dalam kondisi bergerak', 35.24], ['Tempat kerja', 32.13], ['Sekolah/kampus', 11.77]].map(([label, value]) => ({ label: label as string, value: value as number }));
+const tujuan = [['Hiburan', 87.53], ['Mendapat informasi', 80.85], ['Media sosial', 79.65], ['Membeli barang/jasa', 26.73], ['Surat elektronik', 15.21], ['Layanan keuangan digital', 15.11], ['Konten digital', 13.66], ['Pembelajaran daring', 11.76], ['Menjual barang/jasa', 4.78]].map(([label, value]) => ({ label: label as string, value: value as number }));
+const gen = [['Gen Alpha', 12.53], ['Gen Z', 32.65], ['Milenial', 30.45], ['Gen X', 19.19], ['Baby Boomer', 5.18]].map(([label, value]) => ({ label: label as string, value: value as number }));
+const pdd = [['Tidak/belum tamat SD', 13.84], ['SD', 20.22], ['SMP', 21.71], ['SMA/SMK', 32.39], ['Diploma', 2.24], ['Perguruan tinggi', 9.6]].map(([label, value]) => ({ label: label as string, value: value as number }));
+const sinyal = [['Sangat kuat', 21788], ['Kuat', 48363], ['Lemah', 11267], ['Tidak ada', 2721]].map(([label, c]) => ({ label: label as string, value: (c as number) / 84139 * 100 }));
+const oper: [string, number[]][] = [['Jaringan tetap', [248, 325, 443, 639, 758]], ['Jaringan bergerak', [23, 23, 22, 22, 21]], ['Jasa telekomunikasi', [903, 1122, 1171, 1435, 1671]], ['  di dalamnya ISP', [828, 828, 1011, 1248, 1488]], ['Telekomunikasi khusus', [133, 146, 161, 176, 192]], ['Total', [1307, 1615, 1797, 2272, 2642]]];
+const dagang: [string, number[]][] = [['Ekspor TIK (juta US$)', [6743, 7652, 7538, 7393, 10509]], ['Impor TIK (juta US$)', [11170, 14170, 12969, 13560, 17618]], ['Pangsa ekspor TIK (%)', [2.91, 2.62, 2.9, 2.77, 3.71]], ['Pangsa impor TIK (%)', [5.69, 5.96, 5.81, 5.77, 7.28]]];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statistik Telekomunikasi Indonesia 2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Statistik Telekomunikasi Indonesia 2025 (BPS): akses internet, perangkat, sinyal, operator, perdagangan barang TIK, dan belanja rumah tangga." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Internet di saku, bukan di meja: 78% penduduk daring, hanya 1 dari 5 rumah punya komputer</h1>
+  <p class="lead">Akses internet naik dari 66,48% (2022) menjadi 77,63% (2025), hampir seluruhnya lewat ponsel (99,08% pengguna). Komputer, telepon tetap, dan sinyal di Papua pedalaman masih tertinggal.</p>
+  <p class="src">Statistik Telekomunikasi Indonesia 2025 · BPS, Volume 14 · Susenas 2025, persen</p>
+  <div class="growth" role="img" aria-label="Kepemilikan dan akses TIK 2025">
+    {hero.map(([l, v], i) => <div class="col"><div class="n">{n(v)}%</div><div class="bar" style={`--h:${v * 0.82}%;--i:${i}`}></div><div class="y">{l}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Susenas 2022–2025, Podes 2025, dan data Kemenkomdigi. RT = rumah tangga.</p></header>
+  <dl class="kf">
+    <div><dt>77,63%</dt><dd>penduduk 5+ tahun mengakses internet (72,78% pada 2024, 66,48% pada 2022). Kota 82,72%, desa 70,14%: selisih 12,58 poin, menyempit dari 18,24 poin pada 2022.</dd></div>
+    <div><dt>19,94%</dt><dd>rumah tangga memiliki komputer, sementara 91,66% pernah mengakses internet. Komputer di Indonesia 18,06% (2023) dibanding Thailand 22,63%, Viet Nam 26,99%, Singapura 88,82%.</dd></div>
+    <div><dt>0,61%</dt><dd>rumah tangga masih punya telepon tetap, turun dari 1,34% pada 2022. DKI Jakarta 3,55%, selebihnya di bawah 2%.</dd></div>
+    <div><dt>322,82 juta</dt><dd>pelanggan telepon seluler, turun 7,05% setelah konsolidasi SIM; sebaliknya pelanggan ISP naik 12,7% menjadi 19,22 juta.</dd></div>
+    <div><dt>US$10,5 M</dt><dd>ekspor barang TIK (+42,15%), tetapi impor US$17,6 M (+29,93%): defisit sekitar US$7,1 miliar.</dd></div>
+    <div><dt>4,40%</dt><dd>pangsa sektor informasi dan komunikasi terhadap PDB 2025, dengan pertumbuhan 8,35% (PDB 5,11%).</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="akses"><div class="wrap grid">
+  <header><h2>Akses dan perangkat</h2><p>Tren 2022–2025 (persen).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody>
+    {trend.map((r) => <tr><td>{r[0]}</td>{r[1].map((v, i) => <td class={i === 3 ? 'hi' : ''}>{n(v)}</td>)}</tr>)}
+  </tbody></table>
+  <p class="note">Desa mengejar lebih cepat: akses internet desa naik 14,22 poin sejak 2022 (kota 8,56). HP dimiliki 70,75% penduduk (kota 75,74%, desa 63,41%), dan 93,50% rumah tangga (kota 95,59%, desa 90,46%). Komputer: 26,49% rumah tangga kota dan 10,42% desa; 12,99% penduduk memakai komputer. Layar datar ≥30 inci dimiliki 27,00% rumah tangga (kota 35,63%, desa 14,47%).</p></div>
+</div></section>
+
+<section class="s" id="pengguna"><div class="wrap grid">
+  <header><h2>Pengguna internet</h2><p>Komposisi dan cara memakai (persen, 2025).</p></header>
+  <div>
+    <h3>Generasi pengguna</h3><Bars items={gen} tone="ink" top={false} />
+    <p class="note">Laki-laki 51,68% pengguna dan perempuan 48,32% (akses laki-laki 80,18%, perempuan 75,08%). Pengguna menurut pendidikan:</p>
+    <Bars items={pdd} />
+    <h3>Lokasi mengakses</h3><Bars items={lokasi} tone="ink" />
+    <h3>Tujuan mengakses</h3><Bars items={tujuan} tone="sun" />
+    <p class="note">Pilihan ganda. Pengguna mengakses internet setiap hari 89,56% (kota 92,37%, desa 84,69%). Perangkat: ponsel 99,08%, laptop 10,29%, desktop 2,97%, tablet 0,91%. Penggunaan produktif masih sedikit: konten digital 13,66%, menjual 4,78%.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="jaringan"><div class="wrap grid">
+  <header><h2>Jaringan dan sinyal</h2><p>Podes 2025, persen dari 84.139 desa/kelurahan.</p></header>
+  <div>
+    <h3>Kualitas sinyal telepon seluler</h3><Bars items={sinyal} tone="ink" top={false} />
+    <p class="note">Sebanyak 81.418 desa memiliki sinyal seluler; 2.721 belum. Dari yang punya sinyal, 74.014 desa menerima 4G/LTE, 4.760 3G, 1.896 2,5G, dan 748 tanpa sinyal internet. Menara BTS ada di 48.179 desa (kota 21.912, desa 26.267). Sinyal sangat kuat lebih banyak di kota (13.486 desa/kelurahan) dibanding desa (8.302), sedangkan sinyal lemah 10.913 desa/kelurahan perdesaan vs 354 kota.</p>
+    <p class="t">Menurut pulau: Jawa 97,33% desa terjangkau (34,53% sinyal sangat kuat). Maluku dan Papua: 10,00% desa tanpa sinyal dan 21,71% hanya sinyal lemah. Papua Pegunungan 48,6% desa tanpa sinyal seluler, Papua Tengah 45,1%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="operator"><div class="wrap grid">
+  <header><h2>Operator dan pelanggan</h2><p>Penyelenggara telekomunikasi dan jumlah pelanggan (Kemenkomdigi).</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Jenis penyelenggara</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody>
+    {oper.map((r) => <tr><td>{r[0]}</td>{r[1].map((v) => <td>{n(v, 0)}</td>)}</tr>)}
+  </tbody></table>
+  <p class="note">Penyelenggara tumbuh dua kali lipat, tetapi jaringan bergerak seluler hanya 3 karena butuh spektrum dan modal besar. Pelanggan telepon seluler: 365,87 juta (2021) → 322,82 juta (2025), 96,24% prabayar dan 3,76% pascabayar (pascabayar naik dari 9,93 menjadi 12,14 juta). Pelanggan telepon tetap 10,92 juta (2022) → 5,13 juta (2024) → 5,34 juta (2025). Pelanggan ISP 12,50 juta (2021) → 19,22 juta: 92,33% perorangan, 7,65% perusahaan, 0,02% warnet.</p></div>
+</div></section>
+
+<section class="s alt" id="ekonomi"><div class="wrap grid">
+  <header><h2>Ekonomi TIK</h2><p>Perdagangan barang TIK, PDB, dan belanja rumah tangga.</p></header>
+  <div>
+    <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody>
+      {dagang.map((r) => <tr><td>{r[0]}</td>{r[1].map((v) => <td>{n(v, v > 100 ? 0 : 2)}</td>)}</tr>)}
+    </tbody></table></div>
+    <p class="note">Ekspor naik tajam pada 2025 berkat komponen elektronik (US$4.211 juta, 2,7 kali lipat 2024: flash disk, SSD, PCB, prosesor), yang menggeser peralatan komunikasi sebagai kelompok terbesar. Impor terbesar: komputer dan periferal US$6.476 juta, komponen elektronik US$5.526 juta.</p>
+    <p class="t">Sektor informasi dan komunikasi tumbuh 6,82%, 7,74%, 7,59%, 7,57%, dan 8,35% pada 2021–2025, dengan pangsa PDB 4,41% → 4,40%. Sebanyak 93,69% rumah tangga berbelanja telekomunikasi (kota 95,74%, desa 90,73%), rata-rata Rp220.216 per bulan (kota Rp260.019, desa Rp159.243), atau 3,55% konsumsi (kota 3,65%, desa 3,32%). Dari belanja non-makanan (50,86%), 3,55% untuk telekomunikasi.</p>
+  </div>
+</div></section>
+
+<section class="s" id="provinsi"><div class="wrap grid">
+  <header><h2>Provinsi tertinggi dan terendah</h2><p>Dua provinsi tertinggi dan terendah per indikator, 2025.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator</th><th>Nasional</th><th>Tertinggi</th><th>Terendah</th></tr></thead><tbody>
+    {ext.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1])}</b></td><td class="hi">{r[2]}</td><td class="lo">{r[3]}</td></tr>)}
+  </tbody></table>
+  <h3>Semua provinsi</h3>
+  <div style="max-height:560px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>Internet 2022</th><th>Internet 2025</th><th>Kota</th><th>Desa</th><th>RT komputer</th><th>Penduduk HP</th><th>Belanja (rb Rp)</th><th>Tanpa sinyal (%)</th><th>Ada BTS (%)</th></tr></thead><tbody>
+    {tab.map((r) => <tr><td>{r[0]}</td><td>{n(r[1] as number | null)}</td><td><b>{n(r[2])}</b></td><td>{n(r[3] as number | null)}</td><td>{n(r[4] as number | null)}</td><td>{n(r[5] as number | null)}</td><td>{n(r[6] as number | null)}</td><td>{n(r[7] as number | null, 1)}</td><td class={(r[8] as number) > 10 ? 'lo' : ''}>{n(r[8] as number | null, 1)}</td><td>{n(r[9] as number | null, 1)}</td></tr>)}
+  </tbody></table></div>
+  <p class="note">Papua Pegunungan dan Papua Tengah di dasar hampir semua indikator, dengan selisih akses kota-desa terbesar (64,1 dan 58,3 poin; nasional 12,58). Tetapi belanja telekomunikasi rumah tangga justru tertinggi di Papua Barat Daya (Rp405,6 ribu; 5,0% konsumsi) dan Papua (Rp382,3 ribu), kemungkinan karena biaya layanan di wilayah sulit; interpretasi ini bukan temuan publikasi. Kenaikan akses internet 2022–2025 untuk provinsi Papua tidak sebanding karena pemekaran.</p></div>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Sumber campuran.</b>Susenas (rumah tangga dan penduduk), Podes 2025 (desa), Kemenkomdigi (operator dan pelanggan), BPS perdagangan luar negeri dan neraca nasional. 2024 untuk ekspor/impor dan PDB bertanda sementara.</li>
+    <li><b>Angka internet sama dengan laporan lain.</b>77,63% adalah angka 2025; 72,78% di laporan E-Commerce adalah angka 2024 dari seri yang sama (69,21% pada 2023). Keduanya bukan definisi berbeda.</li>
+    <li><b>Pemekaran Papua.</b>Angka 2022–2023 provinsi Papua dan pemekarannya tidak sebanding; angka 2022 bertanda "…" untuk provinsi baru.</li>
+    <li><b>Perbedaan kecil di sumber.</b>Jumlah ISP 2021 disebut 828 di teks dan tabel, sedangkan grafik menampilkan 611 untuk bar pertama. Teks narasi menyebut internet 2025 "meningkat konsisten"; tabel menunjukkan kenaikan tiap tahun.</li>
+    <li><b>Penjelasan kolom.</b>Kategori "Gen Alpha" dan "tidak/belum tamat SD" pada komposisi pengguna saya tafsirkan dari urutan kolom dan jumlah total.</li>
+    <li><b>Cakupan.</b>Sebagian tabel provinsi (frekuensi, perangkat, tujuan per provinsi dan menurut kota/desa) tidak diulas satu per satu.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Telekomunikasi Indonesia 2025</em>, Volume 14, 2026. Angka dibaca dari tabel dan grafik PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
