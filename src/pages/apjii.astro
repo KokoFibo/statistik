@@ -1,0 +1,193 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import { prov } from '../data/apjii';
+const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const yr = ['2022', '2023', '2024', '2025', '2026'];
+const trend = [77.0, 78.2, 79.5, 80.7, 81.72];
+const mk = (rows: [string, number][]) => rows.map(([label, value]) => ({ label, value }));
+const pulau: [string, number, number][] = [['Jawa', 85.95, 58.24], ['Kalimantan', 80.4, 6.2], ['Sumatera', 78.24, 20.74], ['Bali & Nusa Tenggara', 78.14, 5.26], ['Sulawesi', 72.58, 6.62], ['Maluku & Papua', 69.74, 2.94]];
+const demo: [string, string, number, number][] = [['Jenis kelamin', 'Laki-laki', 83.95, 50.03], ['Jenis kelamin', 'Perempuan', 79.79, 49.97], ['Daerah', 'Kota', 84.75, 60.59], ['Daerah', 'Desa', 78.18, 39.41], ['Pendidikan', 'Tidak sekolah/SD', 74.84, 30.88], ['Pendidikan', 'SMP', 82.48, 21.65], ['Pendidikan', 'SMA/SMK', 90.44, 35.49], ['Pendidikan', 'Perguruan tinggi', 92.49, 11.98], ['Generasi', 'Pre-Boomers (80+)', 22.1, 1.55], ['Generasi', 'Baby Boomers (61–79)', 60.62, 8.65], ['Generasi', 'Gen X (45–60)', 80.7, 21.1], ['Generasi', 'Milenial (29–44)', 90.34, 28.87], ['Generasi', 'Gen Z (13–28)', 89.02, 39.83], ['Aktivitas', 'Bekerja', 84.9, 47.3], ['Aktivitas', 'Sekolah/kuliah', 87.5, 20.6], ['Aktivitas', 'Mengurus rumah tangga', 78.8, 26.1], ['Aktivitas', 'Belum/tidak bekerja', 68.4, 4.5], ['Aktivitas', 'Pensiunan', 78.4, 1.5], ['Pendapatan', '< Rp1 juta', 71.95, 17.45], ['Pendapatan', 'Rp1–2,5 juta', 79.28, 29.01], ['Pendapatan', 'Rp2,5–5 juta', 82.64, 43.97], ['Pendapatan', 'Rp5–7,5 juta', 85.6, 7.76], ['Pendapatan', 'Rp7,5–10 juta', 88.85, 1.47], ['Pendapatan', 'Rp10–15 juta', 91.09, 0.24], ['Pendapatan', '> Rp15 juta', 92.69, 0.1]];
+const groups = ['Jenis kelamin', 'Daerah', 'Pendidikan', 'Generasi', 'Aktivitas', 'Pendapatan'];
+const hubung = mk([['Komunikasi dan jejaring sosial', 19.9], ['Hiburan', 19.7], ['Informasi dan berita', 19.6], ['E-commerce dan jasa', 18.7], ['Pendidikan dan pekerjaan', 10.9], ['Layanan keuangan', 5.8], ['Layanan publik/pemerintah', 4.5]]);
+const nonhub = mk([['Tidak punya perangkat', 34.0], ['Tidak tahu cara menggunakan', 31.5], ['Kuota terlalu mahal', 17.2], ['Tidak melihat manfaat', 12.9], ['Disabilitas', 1.3]]);
+const device = mk([['Smartphone', 84.31], ['Laptop/notebook', 9.41], ['Smart TV/konsol game', 3.02], ['Tablet', 2.39], ['Desktop/PC', 0.85]]);
+const dur: [string, number, number][] = [['< 1 jam', 4.2, 9.2], ['1–3 jam', 33.6, 33.9], ['4–6 jam', 43.4, 35.7], ['7–10 jam', 14.5, 13.4], ['> 10 jam', 4.3, 7.6]];
+const kasus: [string, number, number][] = [['Penipuan online', 13.6, 22.1], ['Pencurian data/hack/phishing', 7.8, 14.3], ['Perangkat terkena virus', 7.4, 10.9], ['Tidak bisa akses akun', 4.2, 6.5], ['Isu keamanan lain', 3.6, 4.6], ['Tidak pernah terjadi', 63.3, 41.4]];
+const oper: [string, number, number][] = [['Telkomsel', 37.9, 45.7], ['Indosat Ooredoo Hutchison', 35.5, 29.3], ['XLSmart', 26.7, 24.8]];
+const biaya: [string, number, number][] = [['< Rp50 ribu', 32.5, 34.5], ['Rp50–100 ribu', 55.3, 52.2], ['Rp100–250 ribu', 11.2, 12.2], ['> Rp250 ribu', 0.9, 1.0]];
+const bandingBiaya: [string, number, number][] = [['Lebih murah', 4.2, 8.12], ['Sama saja', 67.1, 48.4], ['Lebih mahal', 28.7, 43.5]];
+const listrik = mk([['Tetap stabil saat listrik padam', 42.8], ['Kadang terputus, tidak terlalu mengganggu', 25.8], ['Selalu terputus, jarang terjadi', 18.5], ['Tidak pernah mati listrik', 5.3], ['Selalu terputus dan sering terjadi', 7.6]]);
+const fixedProv: [string, number, number][] = [['Indihome', 47.3, 43.9], ['My Republic', 13.8, 2.8], ['iConnet', 4.7, 4.2], ['MNC Play', 3.3, 2.1], ['Biznet', 3.1, 3.1], ['XL Home', 2.7, 1.6], ['First Media', 2.6, 2.3], ['Megavision', 2.4, 0.0], ['Oxygen', 1.9, 2.3], ['Satelit', 1.0, 1.6], ['Lainnya', 16.2, 23.8]];
+const fixedWhy: [string, number, number][] = [['Harga paket terjangkau', 32.3, 33.0], ['Promo awal menarik', 24.2, 18.8], ['Reputasi terpercaya', 21.9, 13.9], ['Rekomendasi teman/kerabat', 12.4, 19.3], ['Satu-satunya operator di lokasi', 6.5, 11.8]];
+const sosmed: [string, number, number][] = [['TikTok', 31.8, 35.2], ['Facebook', 29.4, 21.6], ['Instagram', 27.7, 15.9], ['YouTube', 1.6, 27.5]];
+const durSos: [string, number, number][] = [['< 1 jam', 7.9, 9.0], ['1–2 jam', 44.9, 34.1], ['2–3 jam', 37.9, 33.0], ['3–4 jam', 6.9, 15.0], ['> 4 jam', 2.4, 14.8]];
+const toko: [string, number, number][] = [['Shopee', 46.7, 47.3], ['TikTok Shop', 28.5, 36.8], ['Tokopedia', 14.6, 8.3], ['Lazada', 7.1, 5.5], ['Blibli', 0.6, 0.2]];
+const freq: [string, number, number][] = [['Tidak pernah', 27.6, 29.7], ['Beberapa kali dalam beberapa bulan', 24.7, 33.5], ['Beberapa kali sebulan', 30.3, 30.1], ['Beberapa kali seminggu', 14.7, 6.5]];
+const pinjol = mk([['Kebutuhan mendesak (kesehatan, utang)', 22.8], ['Belanja kebutuhan sehari-hari', 18.3], ['Cicilan tanpa kartu kredit', 17.6], ['Proses mudah dan cepat', 15.9], ['Promosi/diskon pinjaman', 10.3], ['Membayar tagihan', 8.4]]);
+const negatif = mk([['Judi online (judol)', 8.9], ['Pinjaman online ilegal', 7.3], ['Hoaks', 5.5], ['Pornografi', 3.9], ['Penipuan lewat media sosial', 3.7]]);
+const bisnis = mk([['Berkomunikasi dengan pelanggan/mitra', 32.7], ['Mencari peluang bisnis baru', 16.3], ['Memasarkan produk/jasa (affiliate)', 14.7], ['Berjualan di media sosial/e-commerce', 12.7], ['Mengelola keuangan/inventaris', 9.4], ['Kreator konten', 4.5]]);
+const aiWhy: [string, number, number][] = [['Merasa tidak butuh', 43.1, 22.7], ['Tidak tahu tentang AI', 35.5, 46.6], ['Tidak tahu cara memakai', 8.1, 15.5], ['Belum menemukan layanan menarik', 4.4, 5.9], ['Layanan sulit dipakai', 4.0, 3.5], ['Khawatir privasi dan keamanan', 2.9, 3.6]];
+const nav = [['ringkasan', 'Ringkasan'], ['penetrasi', 'Penetrasi'], ['perilaku', 'Perilaku'], ['seluler', 'Seluler'], ['tetap', 'Internet tetap'], ['konten', 'Konten dan belanja'], ['ai', 'AI dan bisnis'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
+const hi = [...prov].sort((a, b) => b[1] - a[1]);
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Survei APJII Internet Indonesia 2026 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Survei APJII 2026: penetrasi internet 81,72%, perilaku pengguna, operator, internet tetap, belanja online, dan AI." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap">
+  <h1>Internet kian merata, tetapi pemakaian AI dan ketergantungan bisnis justru turun</h1>
+  <p class="lead">Survei APJII memperkirakan 235,26 juta orang (81,72%) terhubung internet pada 2026. Pengguna merasa lebih aman, namun hanya 18,2% memakai AI dan hanya 11,2% pelaku usaha merasa bergantung pada internet.</p>
+  <p class="src">Survei APJII 2026 · 8.700 responden, 38 provinsi, MoE ±1,1% · penetrasi internet, persen. Survei asosiasi, bukan data BPS.</p>
+  <div class="growth" role="img" aria-label="Penetrasi internet 2022 sampai 2026">
+    {trend.map((v, i) => <div class="col"><div class="n">{n(v, 1)}%</div><div class="bar" style={`--h:${v * 0.82}%;--i:${i}`}></div><div class="y">{yr[i]}</div></div>)}
+  </div>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Survei tatap muka 1 Februari–15 Maret 2026 terhadap WNI berusia minimal 13 tahun. Perbandingan 2025 vs 2026 berasal dari survei yang sama tahun sebelumnya.</p></header>
+  <dl class="kf">
+    <div><dt>81,72%</dt><dd>penetrasi internet: 235.261.078 dari 287.886.782 penduduk, naik dari 80,7% (2025) dan 77,0% (2022). Jawa menyumbang 58,24% pengguna.</dd></div>
+    <div><dt>84,31%</dt><dd>mengakses lewat smartphone, laptop 9,41%, desktop hanya 0,85%. Prabayar 93,1% pengguna seluler.</dd></div>
+    <div><dt>42,3%</dt><dd>pengguna internet berlangganan internet tetap (99,5 juta orang), naik 3,6 poin; Indihome 47,3%.</dd></div>
+    <div><dt>63,3%</dt><dd>pengguna tidak pernah mengalami kasus keamanan (41,4% pada 2025). Penipuan online turun dari 22,1% ke 13,6%.</dd></div>
+    <div><dt>18,2%</dt><dd>mengakses AI, turun dari 27,3% (2025); 43,1% yang tidak memakai merasa tidak butuh.</dd></div>
+    <div><dt>11,2%</dt><dd>pelaku usaha yang bergantung pada internet, turun dari 23,3% pada 2025.</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="penetrasi"><div class="wrap grid">
+  <header><h2>Penetrasi</h2><p>Penetrasi = persentase kelompok yang terhubung. Kontribusi = pangsa kelompok dalam total pengguna.</p></header>
+  <div>
+    <h3>Menurut pulau</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Pulau</th><th>Penetrasi (%)</th><th>Kontribusi (%)</th></tr></thead><tbody>
+      {pulau.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1])}</b></td><td>{n(r[2])}</td></tr>)}
+    </tbody></table></div>
+    <h3>Menurut demografi</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Kelompok</th><th>Kategori</th><th>Penetrasi (%)</th><th>Kontribusi (%)</th></tr></thead><tbody>
+      {groups.flatMap((g) => demo.filter((d) => d[0] === g).map((d, i) => <tr><td>{i === 0 ? <b>{g}</b> : ''}</td><td>{d[1]}</td><td class={d[2] < 70 ? 'lo' : ''}>{n(d[2])}</td><td>{n(d[3])}</td></tr>))}
+    </tbody></table></div>
+    <p class="note">Laki-laki 83,95% dan perempuan 79,79%; kota 84,75% dan desa 78,18%. Penetrasi naik seiring pendidikan (74,84% tidak sekolah/SD hingga 92,49% perguruan tinggi) dan pendapatan (71,95% hingga 92,69%). Milenial 90,34% dan Gen Z 89,02%; baby boomer 60,62% dan pre-boomers hanya 22,10%. Gen Z menyumbang 39,83% pengguna.</p>
+    <h3>Alasan terhubung internet (%)</h3><Bars items={hubung} />
+    <h3>Alasan tidak terhubung (%)</h3><Bars items={nonhub} tone="ink" />
+    <p class="note">Pilihan ganda. Hambatan utama adalah perangkat (34,0%) dan literasi (31,5%), bukan hanya harga kuota (17,2%). Laki-laki dan perempuan berbeda: perempuan lebih sering tidak tahu cara memakai perangkat (37,0% vs 26,2%).</p>
+  </div>
+</div></section>
+
+<section class="s" id="perilaku"><div class="wrap grid">
+  <header><h2>Perilaku dan keamanan</h2><p>Perangkat, durasi, dan kasus keamanan.</p></header>
+  <div>
+    <h3>Perangkat untuk mengakses internet (%)</h3><Bars items={device} tone="ink" />
+    <h3>Durasi mengakses internet per hari (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Durasi</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {dur.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Mayoritas (84,6%) responden menyatakan durasi akses sama seperti tahun lalu; 12,1% bertambah 60–120 menit dan 3,3% berkurang.</p>
+    <h3>Kasus keamanan yang dialami (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Kasus</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {kasus.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Kasus yang dilaporkan turun di semua jenis, tetapi hanya 11,9% korban melapor ke pihak berwajib; sebagian besar meminta bantuan keluarga/teman (35,9%) atau mencoba menyelesaikan sendiri (30,5%). Sebanyak 52,9% tidak pernah mengganti kata sandi, dan 47,6% sangat tidak bersedia memasukkan data pribadi. Skor kepuasan rata-rata: operator seluler 7,39, internet tetap 7,25, wifi gratis 7,16.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="seluler"><div class="wrap grid">
+  <header><h2>Internet seluler</h2><p>Operator, biaya, dan gangguan.</p></header>
+  <div>
+    <h3>Operator yang digunakan (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Operator</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {oper.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <h3>Pengeluaran paket data sebulan (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Kisaran</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {biaya.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table>
+    <h3>Biaya dibanding tahun lalu (%)</h3>
+    <table class="cmp"><thead><tr><th>Penilaian</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {bandingBiaya.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Telkomsel turun 7,8 poin (45,7% menjadi 37,9%) sementara Indosat Ooredoo Hutchison naik 6,2 poin dan XLSmart naik 1,9 poin. Sebanyak 87,8% menghabiskan di bawah Rp100 ribu per bulan, dan 28,7% merasa biaya lebih mahal dibanding setahun lalu (43,5% pada 2025). Prabayar 93,1% dan pascabayar 6,9%; pada survei 2025 prabayar 84,7%, pascabayar 2,2%, dan hanya wifi 13,1%.</p>
+    <h3>Saat listrik padam (%)</h3><Bars items={listrik} tone="sun" top={false} />
+    <p class="note">Sebanyak 26,1% pengguna mengalami internet terputus saat listrik padam, dan di desa gangguan sering terjadi lebih banyak (10,2% vs 5,9% di kota).</p>
+  </div>
+</div></section>
+
+<section class="s" id="tetap"><div class="wrap grid">
+  <header><h2>Internet tetap</h2><p>42,3% pengguna berlangganan (2025: 38,7%).</p></header>
+  <div>
+    <div class="tw"><table class="cmp"><thead><tr><th>Penyedia</th><th>2026 (%)</th><th>2025 (%)</th></tr></thead><tbody>
+      {fixedProv.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table>
+    <h3>Alasan memilih penyedia (%)</h3>
+    <table class="cmp"><thead><tr><th>Alasan</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {fixedWhy.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Indihome masih dominan (47,3%), tetapi My Republic naik dari 2,8% ke 13,8%. Sebanyak 57,7% pengguna internet tidak berlangganan internet tetap, terutama karena merasa internet seluler cukup memadai (47,2%) dan biaya berlangganan terlalu mahal (32,9%). Satelit broadband hanya dipakai 0,4% pengguna; pemasangannya di perkotaan 29,0%, pinggiran kota 25,8%, dan perdesaan 25,8%.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="konten"><div class="wrap grid">
+  <header><h2>Konten, belanja, dan keuangan</h2><p>Media sosial, toko online, pinjaman online, dan konten negatif.</p></header>
+  <div>
+    <h3>Media sosial yang paling sering diakses (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Aplikasi</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {sosmed.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table>
+    <h3>Durasi media sosial per hari (%)</h3>
+    <table class="cmp"><thead><tr><th>Durasi</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {durSos.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table>
+    <h3>Toko online yang paling sering diakses menurut jenis kelamin (%)</h3>
+    <table class="cmp"><thead><tr><th>Toko</th><th>Laki-laki</th><th>Perempuan</th></tr></thead><tbody>
+      {toko.map((r) => <tr><td>{r[0]}</td><td>{n(r[1], 1)}</td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table>
+    <h3>Frekuensi transaksi online (%)</h3>
+    <table class="cmp"><thead><tr><th>Frekuensi</th><th>2025</th><th>2026</th></tr></thead><tbody>
+      {freq.map((r) => <tr><td>{r[0]}</td><td>{n(r[1], 1)}</td><td><b>{n(r[2], 1)}</b></td></tr>)}
+    </tbody></table></div>
+    <p class="note">Shopee unggul di keduanya, dan TikTok Shop jauh lebih populer di kalangan perempuan (36,8% vs 28,5%). Belanja pakaian dan aksesori mendominasi (39,6%), disusul produk kecantikan (18,6%). Pengeluaran bulanan di bawah Rp100 ribu naik dari 17,8% ke 28,0%. Pinjaman online dipakai 6,6% pengguna, dengan alasan utama kebutuhan mendesak.</p>
+    <h3>Alasan memakai pinjaman online (%)</h3><Bars items={pinjol} tone="ink" />
+    <h3>Konten negatif yang pernah ditemui (%)</h3><Bars items={negatif} tone="sun" />
+    <p class="note">70,7% tidak pernah terpapar konten negatif. Dari yang mengetahui keuntungan judi online, 72,5% menjawab "tidak ada sama sekali" dan 11,9% mengincar uang cepat.</p>
+  </div>
+</div></section>
+
+<section class="s" id="ai"><div class="wrap grid">
+  <header><h2>AI dan bisnis</h2><p>Penggunaan AI turun; ketergantungan bisnis pada internet menurun.</p></header>
+  <div>
+    <h3>Alasan tidak menggunakan AI (%)</h3>
+    <div class="tw"><table class="cmp"><thead><tr><th>Alasan</th><th>2026</th><th>2025</th></tr></thead><tbody>
+      {aiWhy.map((r) => <tr><td>{r[0]}</td><td><b>{n(r[1], 1)}</b></td><td>{n(r[2], 1)}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Hanya 18,2% pengguna mengakses AI pada 2026 (27,3% pada 2025). Pengguna AI terbanyak di Gen Z (29,4%); Milenial 16,7%, Gen X 7,5%, baby boomer 0,8%. Perangkat smart home dipakai hanya 5,7% responden, terutama perangkat hiburan (53,2%) dan keamanan (31,5%).</p>
+    <h3>Aktivitas bisnis dengan internet (%)</h3><Bars items={bisnis} />
+    <p class="note">Hanya 11,2% pelaku usaha yang bergantung pada internet (23,3% pada 2025); 68,0% berpendapatan di bawah Rp5 juta per bulan dan 26,4% Rp5–10 juta. Internet dipakai terutama untuk berkomunikasi dengan pelanggan, bukan berjualan (12,7%).</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="provinsi"><div class="wrap grid">
+  <header><h2>38 provinsi</h2><p>Penetrasi, kontribusi, dan margin of error (MoE) per provinsi.</p></header>
+  <div>
+    <div class="tw" style="max-height:560px;overflow:auto"><table class="cmp"><thead><tr><th>Provinsi</th><th>Penetrasi (%)</th><th>Kontribusi (%)</th><th>MoE (±)</th></tr></thead><tbody>
+      {hi.map((r) => <tr><td>{r[0]}</td><td class={r[1] < 66 ? 'lo' : r[1] > 90 ? 'hi' : ''}><b>{n(r[1])}</b></td><td>{n(r[2])}</td><td class={r[3] > 15 ? 'lo' : ''}>{n(r[3])}</td></tr>)}
+    </tbody></table></div>
+    <p class="note">Tertinggi: DKI Jakarta (92,57%), DI Yogyakarta (92,40%), Bali (91,81%), Kalimantan Tengah (90,79%). Terendah: Sulawesi Barat (54,25%), Papua Pegunungan (58,72%), Sulawesi Tengah (64,79%), Kalimantan Selatan (65,89%). Jawa Barat (18,95%), Jawa Timur (15,10%), dan Jawa Tengah (13,75%) menyumbang 47,8% pengguna. MoE provinsi besar (hingga ±21,91 poin di Papua), jadi perbedaan antarprovinsi sering tidak signifikan.</p>
+  </div>
+</div></section>
+
+<section class="s" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Hal yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Survei asosiasi, bukan data BPS.</b>APJII adalah asosiasi penyelenggara jasa internet. Sampel 8.700 orang (WNI ≥13 tahun) dengan multistage random sampling dan MoE ±1,1% nasional; penetrasi dihitung terhadap proyeksi populasi 287,9 juta.</li>
+    <li><b>Berbeda dari BPS.</b>Susenas BPS mencatat akses internet 77,63% (penduduk 5+ tahun, 2025) dan 72,78% (2024), sedangkan APJII 80,7% (2025) dan 81,72% (2026). Selisih sekitar 3 poin pada 2025 bisa berasal dari batas usia, metode, dan definisi. Provinsi lebih berbeda lagi: Papua Pegunungan 58,72% (APJII, MoE ±13,86) vs 15,40% (BPS), jadi angka provinsi APJII bersifat indikatif.</li>
+    <li><b>Perubahan pertanyaan.</b>YouTube turun dari 27,5% ke 1,6% sebagai media sosial paling sering, kemungkinan karena YouTube kini dikategorikan sebagai video, dan beberapa opsi bertanda 0,0% belum ada pada 2025. Perbandingan 2025–2026 untuk item tersebut tidak sebanding.</li>
+    <li><b>Banyak jawaban ganda.</b>Pertanyaan bertanda multiple answer tidak berjumlah 100%.</li>
+    <li><b>Dibaca dari infografis.</b>Angka diambil dari teks dan gambar slide; label tahun 2025 dan 2026 saya cocokkan dengan legenda warna tiap slide. Slide yang labelnya ambigu (kecepatan paket, wifi gratis, alasan memilih operator seluler) tidak saya pakai.</li>
+    <li><b>Cakupan.</b>Survei tambahan tentang peran internet di pendidikan, kesehatan, dan perhotelan serta segmentasi pasar ISP ada di buku berbayar dan tidak termuat.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Asosiasi Penyelenggara Jasa Internet Indonesia (APJII), <em>Profil Internet Indonesia 2026: Survei Penetrasi Internet dan Perilaku Pengguna</em>, dilaksanakan bersama Swatama Research. Angka dibaca dari infografis PDF; periksa ke <a href="https://survei.apjii.or.id">survei.apjii.or.id</a> untuk kutipan resmi.</div></footer>
+</body></html>
