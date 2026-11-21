@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { J } from '../data/pendidikan';
 const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -7,13 +7,7 @@ const hero = [['7–12 th', 99.23], ['13–15 th', 96.3], ['16–18 th', 77.86],
 const nav = [['ringkasan', 'Ringkasan'], ['sekolah', 'Sekolah dan guru'], ['partisipasi', 'Partisipasi'], ['kesenjangan', 'Kesenjangan'], ['capaian', 'Capaian'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
 const yr = ['2021', '2022', '2023', '2024', '2025'];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Statistik Pendidikan 2025 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Statistik Pendidikan 2025 (BPS): sekolah, guru, APS, APK, APM, anak tidak sekolah, dan capaian pendidikan." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Statistik Pendidikan 2025 | Ringkasan dan analisis"} description={"Analisis Statistik Pendidikan 2025 (BPS): sekolah, guru, APS, APK, APM, anak tidak sekolah, dan capaian pendidikan."} nav={nav} current="pendidikan">
 <header class="hero"><div class="wrap">
   <h1>Hampir semua anak SD bersekolah, tapi hanya 29 dari 100 usia kuliah</h1>
   <p class="lead">Angka partisipasi sekolah turun tajam seiring usia. Anak tidak sekolah usia 16–18 tahun menurun 3,82 poin menjadi 15,38%, tetapi di Papua Tengah masih 53,37%.</p>
@@ -95,5 +89,5 @@ const yr = ['2021', '2022', '2023', '2024', '2025'];
     <li><b>Cakupan.</b>Tabel sampling error (sekitar 40 tabel) dan lampiran tidak diulas.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendidikan 2025</em>, Volume 14 (ISSN 2086-4566). Angka dihitung dari tabel dan grafik PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendidikan 2025</em>, Volume 14 (ISSN 2086-4566). Angka dihitung dari tabel dan grafik PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

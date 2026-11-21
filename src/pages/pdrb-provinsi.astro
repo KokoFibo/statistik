@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { J } from '../data/pdrbprov';
 const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -10,13 +10,7 @@ const nom = J.adhb.slice(1).map((v, i) => (v / J.adhb[i] - 1) * 100);
 const kontrib = [...J.ind].sort((a, b) => b[4] - a[4]).slice(0, 8).map((r) => ({ label: r[0], value: r[4] }));
 const nav = [['ringkasan', 'Ringkasan'], ['pulau', 'Pulau'], ['sektor', 'Lapangan usaha'], ['harga', 'Siklus harga'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PDRB Provinsi menurut Lapangan Usaha 2021–2025 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis PDRB 38 provinsi menurut 17 lapangan usaha 2021–2025 (BPS, Volume 19, 2026): struktur, sumber pertumbuhan, dan siklus harga komoditas." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"PDRB Provinsi menurut Lapangan Usaha 2021–2025 | Ringkasan dan analisis"} description={"Analisis PDRB 38 provinsi menurut 17 lapangan usaha 2021–2025 (BPS, Volume 19, 2026): struktur, sumber pertumbuhan, dan siklus harga komoditas."} nav={nav} current="pdrb-provinsi">
 <header class="hero"><div class="wrap">
   <h1>Ekonomi tumbuh 5%, digerakkan industri, bukan tambang</h1>
   <p class="lead">Industri pengolahan menyumbang 1,31 dari 5,10 poin pertumbuhan 2025. Pertambangan, yang melonjak pada 2022, justru menyusut 0,39% dan harganya terus turun.</p>
@@ -90,5 +84,5 @@ const nav = [['ringkasan', 'Ringkasan'], ['pulau', 'Pulau'], ['sektor', 'Lapanga
     <li><b>Kategori digabung.</b>Jasa perusahaan (M,N) dan jasa lainnya (R,S,T,U) disajikan gabungan; tabel indeks per kategori dan sub-subsektor tidak diulas semuanya di sini.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Provinsi-Provinsi di Indonesia Menurut Lapangan Usaha 2021–2025</em>, Volume 19, 2026 (ISSN 2622–805X). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Provinsi-Provinsi di Indonesia Menurut Lapangan Usaha 2021–2025</em>, Volume 19, 2026 (ISSN 2622–805X). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

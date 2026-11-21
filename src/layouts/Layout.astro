@@ -1,0 +1,215 @@
+---
+import '../styles/global.css';
+import { laporan, kelompok } from '../data/laporan';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Bagian di halaman ini: [id, label]. Jadi chip navigasi yang menyorot posisi baca. */
+  nav?: [string, string][];
+  /** slug laporan yang sedang dibuka (untuk menu dan tombol sebelumnya/berikutnya). */
+  current?: string;
+  /** true untuk halaman indeks: tombol "Semua laporan" disembunyikan karena daftarnya sudah di halaman. */
+  home?: boolean;
+}
+const { title, description, nav = [], current, home = false } = Astro.props;
+const idx = laporan.findIndex((l) => l.slug === current);
+const prev = idx > 0 ? laporan[idx - 1] : undefined;
+const next = idx >= 0 && idx < laporan.length - 1 ? laporan[idx + 1] : undefined;
+---
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e2238" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:type" content={home ? 'website' : 'article'} />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+
+<header class="bar" id="top">
+  <div class="wrap bar-in">
+    <a class="brand" href="/" aria-label="Statistik diringkas, ke beranda">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#a9d6ea" fill-opacity=".16"/><rect x="6" y="17" width="5" height="9" rx="1" fill="#a9d6ea"/><rect x="13.5" y="12" width="5" height="14" rx="1" fill="#a9d6ea"/><rect x="21" y="6" width="5" height="20" rx="1" fill="#f2a516"/></svg>
+      <span>Statistik diringkas</span>
+    </a>
+    {!home && (
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu-panel">
+        <span>Semua laporan</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    )}
+    {nav.length > 0 && (
+      <nav class="chips" aria-label={home ? 'Kelompok laporan' : 'Bagian di halaman ini'} data-l="false" data-r="false">
+        <div class="chips-scroll">
+          {nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}
+        </div>
+      </nav>
+    )}
+  </div>
+  {!home && (
+    <>
+      <div class="scrim" id="menu-scrim" hidden></div>
+      <nav class="panel" id="menu-panel" aria-label="Semua laporan" hidden>
+        <div class="wrap">
+          {kelompok.map((k) => (
+            <div>
+              <p class="pg" id={`pg-${k.id}`}>{k.judul}</p>
+              <ul aria-labelledby={`pg-${k.id}`}>
+                {laporan.filter((l) => l.kelompok === k.id).map((l) => (
+                  <li>
+                    <a href={`/${l.slug}`} aria-current={l.slug === current ? 'page' : undefined}>
+                      <span class="pt">{l.judul}{l.sumber !== 'BPS' && <span class="tag">{l.sumber}</span>}</span>
+                      <span class="pm"><b>{l.angka}</b> {l.angkaKet}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </nav>
+    </>
+  )}
+</header>
+
+<main id="main"><slot /></main>
+
+{(prev || next) && (
+  <nav class="pager" aria-label="Laporan lainnya">
+    <div class="wrap">
+      {prev && <a class="prev" href={`/${prev.slug}`} rel="prev"><small>Laporan sebelumnya</small><span>{prev.judul}</span></a>}
+      {next && <a class="next" href={`/${next.slug}`} rel="next"><small>Laporan berikutnya</small><span>{next.judul}</span></a>}
+    </div>
+  </nav>
+)}
+
+<slot name="footer" />
+
+<button type="button" class="totop" id="to-top" aria-label="Kembali ke atas" hidden>
+  <svg width="18" height="18" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script>
+  const bar = document.querySelector('.bar');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Menu "Semua laporan"
+  const btn = document.getElementById('menu-btn');
+  const panel = document.getElementById('menu-panel');
+  const scrim = document.getElementById('menu-scrim');
+  function setOpen(open, back) {
+    btn.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+    scrim.hidden = !open;
+    document.body.classList.toggle('menu-open', open);
+    if (open) {
+      const f = panel.querySelector('a[aria-current="page"]') || panel.querySelector('a');
+      if (f) f.focus();
+    } else if (back) btn.focus();
+  }
+  if (btn && panel && scrim) {
+    btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+    scrim.addEventListener('click', () => setOpen(false));
+    panel.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) setOpen(false, true); });
+    document.addEventListener('focusin', (e) => { if (!panel.hidden && bar && !bar.contains(e.target)) setOpen(false); });
+  }
+
+  // Chip bagian: petunjuk geser di tepi + sorot bagian yang sedang dibaca
+  const wrap = document.querySelector('.chips');
+  const scroller = document.querySelector('.chips-scroll');
+  const chips = scroller ? Array.from(scroller.querySelectorAll('a')) : [];
+  function edges() {
+    if (!wrap || !scroller) return;
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    wrap.dataset.l = String(scroller.scrollLeft > 4);
+    wrap.dataset.r = String(scroller.scrollLeft < max - 4);
+  }
+  if (scroller) {
+    scroller.addEventListener('scroll', edges, { passive: true });
+    addEventListener('resize', edges);
+    edges();
+  }
+  const targets = chips.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+  let current = -1;
+  function update() {
+    if (!targets.length) return;
+    const line = (bar ? bar.offsetHeight : 56) + 40;
+    let idx = -1;
+    targets.forEach((t, i) => { if (t && t.getBoundingClientRect().top <= line) idx = i; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) idx = targets.length - 1;
+    if (idx === current) return;
+    current = idx;
+    chips.forEach((a, i) => (i === idx ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')));
+    if (idx >= 0 && scroller) {
+      const a = chips[idx];
+      scroller.scrollTo({ left: a.offsetLeft - (scroller.clientWidth - a.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    }
+  }
+
+  // Tombol kembali ke atas
+  const toTop = document.getElementById('to-top');
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      update();
+      if (toTop) toTop.hidden = scrollY < 900;
+    });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+  if (toTop) toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
+
+  // Daftar/tabel panjang: di HP hanya 10 baris pertama, sisanya lewat tombol (hindari scroll di dalam scroll)
+  const LIMIT = 10;
+  document.querySelectorAll('.prov, .tw[style*="max-height"]').forEach((box) => {
+    const rows = box.querySelectorAll('ul.bars > li, tbody > tr');
+    if (rows.length <= LIMIT + 2) return;
+    box.classList.add('is-collapsed');
+    const more = document.createElement('button');
+    const label = 'Tampilkan semua (' + rows.length + ')';
+    more.type = 'button';
+    more.className = 'more';
+    more.setAttribute('aria-expanded', 'false');
+    more.textContent = label;
+    more.addEventListener('click', () => {
+      const open = !box.classList.toggle('is-collapsed');
+      more.setAttribute('aria-expanded', String(open));
+      more.textContent = open ? 'Tampilkan lebih sedikit' : label;
+      if (!open) box.scrollIntoView({ block: 'start' });
+    });
+    if (box.classList.contains('prov')) box.appendChild(more);
+    else box.insertAdjacentElement('afterend', more);
+  });
+
+  // Tabel tanpa nama: ambil dari judul terdekat supaya pembaca layar tahu isinya
+  document.querySelectorAll('table:not([aria-label])').forEach((t) => {
+    let el = t.closest('.tw') || t;
+    let label = '';
+    while (el && !label && el.tagName !== 'SECTION' && el.tagName !== 'MAIN') {
+      for (let p = el.previousElementSibling; p && !label; p = p.previousElementSibling) {
+        if (/^H[23]$/.test(p.tagName)) label = p.textContent.trim();
+        else if (p.tagName === 'HEADER') { const h = p.querySelector('h2'); if (h) label = h.textContent.trim(); }
+      }
+      el = el.parentElement;
+    }
+    if (label) t.setAttribute('aria-label', label);
+  });
+</script>
+</body>
+</html>

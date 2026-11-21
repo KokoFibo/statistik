@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import * as d from '../data/ecom';
 const id = (n: number, f = 2) => n.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -11,19 +11,7 @@ const byPen = [...d.provinsi].sort((a, b) => b[3] - a[3]).map(([label, , , value
 const maxCount = byCount[0][1];
 const nav = [['ringkasan', 'Ringkasan'], ['pertumbuhan', 'Pertumbuhan'], ['pelaku', 'Pelaku usaha'], ['provinsi', 'Provinsi'], ['aktivitas', 'Aktivitas'], ['teknologi', 'Teknologi'], ['dampak', 'Dampak ekonomi'], ['catatan', 'Catatan']];
 ---
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Statistik E-Commerce Indonesia 2024 | Ringkasan data BPS</title>
-  <meta name="description" content="Ringkasan detail publikasi BPS Statistik E-Commerce 2024: 4,40 juta usaha, transaksi Rp1.288,93 triliun, profil pelaku, teknologi, dan tantangan." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
-</head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
-
+<Layout title={"Statistik E-Commerce Indonesia 2024 | Ringkasan data BPS"} description={"Ringkasan detail publikasi BPS Statistik E-Commerce 2024: 4,40 juta usaha, transaksi Rp1.288,93 triliun, profil pelaku, teknologi, dan tantangan."} nav={nav} current="ecommerce">
 <header class="hero">
   <div class="wrap">
     <h1>E-commerce Indonesia tumbuh, tapi masih lewat WhatsApp</h1>
@@ -192,7 +180,7 @@ const nav = [['ringkasan', 'Ringkasan'], ['pertumbuhan', 'Pertumbuhan'], ['pelak
   </div>
 </div></section>
 
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik E-Commerce 2024</em>, Volume 7, 2025 (katalog {d.meta.katalog}, nomor publikasi {d.meta.publikasi}). Ringkasan ini disusun dari PDF publikasi; angka dibaca dari teks dan grafik, jadi periksa ke sumber resmi di <a href="https://www.bps.go.id">bps.go.id</a> untuk keperluan kutipan.</div></footer>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik E-Commerce 2024</em>, Volume 7, 2025 (katalog {d.meta.katalog}, nomor publikasi {d.meta.publikasi}). Ringkasan ini disusun dari PDF publikasi; angka dibaca dari teks dan grafik, jadi periksa ke sumber resmi di <a href="https://www.bps.go.id">bps.go.id</a> untuk keperluan kutipan.</div></footer>
 
 <script>
   const btns = document.querySelectorAll<HTMLButtonElement>('.tabs button');
@@ -202,5 +190,4 @@ const nav = [['ringkasan', 'Ringkasan'], ['pertumbuhan', 'Pertumbuhan'], ['pelak
     document.getElementById('p-pen')!.hidden = b.dataset.tab !== 'pen';
   }));
 </script>
-</body>
-</html>
+</Layout>

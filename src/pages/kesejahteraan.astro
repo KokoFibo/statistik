@@ -1,18 +1,12 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import * as d from '../data/kesra';
 const n = (v: number, f = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
 const sel = (v: number) => (v > 0 ? '+' : '') + n(v);
 const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendidikan'], ['kesehatan', 'Kesehatan'], ['rumah', 'Perumahan'], ['digital', 'Digital dan keuangan'], ['kesenjangan', 'Kesenjangan'], ['catatan', 'Catatan']];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Statistik Kesejahteraan Rakyat 2025 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Statistik Kesejahteraan Rakyat 2025 (BPS, Susenas Maret 2025): tren 2021–2025, pendidikan, kesehatan, perumahan, TIK, dan kesenjangan." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Statistik Kesejahteraan Rakyat 2025 | Ringkasan dan analisis"} description={"Analisis Statistik Kesejahteraan Rakyat 2025 (BPS, Susenas Maret 2025): tren 2021–2025, pendidikan, kesehatan, perumahan, TIK, dan kesenjangan."} nav={nav} current="kesejahteraan">
 <header class="hero"><div class="wrap" style="padding-bottom:64px">
   <h1>Hidup lebih terlindungi, tapi belum merata</h1>
   <p class="lead">Jaminan kesehatan, akta kelahiran, dan sanitasi terus naik. Papua pedalaman dan wilayah pedesaan masih tertinggal jauh, terutama di pendidikan dan akses digital.</p>
@@ -104,5 +98,5 @@ const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendi
     <li><b>Angka internet sama dengan laporan lain.</b>77,63% adalah angka 2025 (penduduk 5+ tahun). Angka 72,78% di laporan E-Commerce adalah angka 2024 dari seri Susenas yang sama (69,21% pada 2023), jadi bukan perbedaan definisi.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Kesejahteraan Rakyat 2025</em>, Volume 40 (ISSN 2502–7492). Angka dibaca dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Kesejahteraan Rakyat 2025</em>, Volume 40 (ISSN 2502–7492). Angka dibaca dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

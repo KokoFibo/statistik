@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { prov } from '../data/podes';
 const N = 84139, D = 75653;
@@ -19,13 +19,7 @@ const bencana: [string, number][] = [['Banjir', 15398], ['Gempa bumi', 11477], [
 const iklim: [string, number][] = [['Gangguan kesehatan (pneumonia, malaria, DBD)', 31122], ['Kesulitan bertani/melaut', 25224], ['Gagal panen', 22141], ['Kelangkaan air', 19073], ['Kerusakan rumah/harta benda', 12430], ['Kehilangan mata pencaharian', 9995]];
 const keg: [string, number][] = [['Pupuk organik', 35785], ['Pola tanam adaptif', 31533], ['Penanaman pohon/mangrove', 16129], ['Penampungan air hujan', 13532], ['Pengolahan sampah/daur ulang', 11777], ['Energi terbarukan', 9007], ['Terasering', 7573], ['Lubang biopori', 4891]];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Statistik Potensi Desa 2025 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Podes 2025 (BPS): infrastruktur, digital, ekonomi, pemerintahan, lingkungan, dan bencana di 84.139 desa/kelurahan." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Statistik Potensi Desa 2025 | Ringkasan dan analisis"} description={"Analisis Podes 2025 (BPS): infrastruktur, digital, ekonomi, pemerintahan, lingkungan, dan bencana di 84.139 desa/kelurahan."} nav={nav} current="potensi-desa">
 <header class="hero"><div class="wrap">
   <h1>Sinyal 4G sudah menjangkau 88% desa, tetapi hanya 12% desa punya bank</h1>
   <p class="lead">Podes 2025 mencatat 84.291 desa, kelurahan, dan permukiman transmigrasi. Jaringan telepon sudah hampir merata, sedangkan layanan keuangan formal dan transportasi masih tertinggal, terutama di Papua pedalaman.</p>
@@ -128,5 +122,5 @@ const keg: [string, number][] = [['Pupuk organik', 35785], ['Pola tanam adaptif'
     <li><b>Cakupan analisis.</b>Tabel menurut provinsi lebih rinci (mis. jenis pengolahan sampah, perkelahian massal, penyelesaian sengketa) tidak diulas semuanya.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Potensi Desa Indonesia 2025</em>, Volume 16 (ISSN 2714-8521). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Potensi Desa Indonesia 2025</em>, Volume 16 (ISSN 2714-8521). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

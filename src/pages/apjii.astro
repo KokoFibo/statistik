@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { prov } from '../data/apjii';
 const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -31,13 +31,7 @@ const aiWhy: [string, number, number][] = [['Merasa tidak butuh', 43.1, 22.7], [
 const nav = [['ringkasan', 'Ringkasan'], ['penetrasi', 'Penetrasi'], ['perilaku', 'Perilaku'], ['seluler', 'Seluler'], ['tetap', 'Internet tetap'], ['konten', 'Konten dan belanja'], ['ai', 'AI dan bisnis'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
 const hi = [...prov].sort((a, b) => b[1] - a[1]);
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Survei APJII Internet Indonesia 2026 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Survei APJII 2026: penetrasi internet 81,72%, perilaku pengguna, operator, internet tetap, belanja online, dan AI." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Survei APJII Internet Indonesia 2026 | Ringkasan dan analisis"} description={"Analisis Survei APJII 2026: penetrasi internet 81,72%, perilaku pengguna, operator, internet tetap, belanja online, dan AI."} nav={nav} current="apjii">
 <header class="hero"><div class="wrap">
   <h1>Internet kian merata, tetapi pemakaian AI dan ketergantungan bisnis justru turun</h1>
   <p class="lead">Survei APJII memperkirakan 235,26 juta orang (81,72%) terhubung internet pada 2026. Pengguna merasa lebih aman, namun hanya 18,2% memakai AI dan hanya 11,2% pelaku usaha merasa bergantung pada internet.</p>
@@ -189,5 +183,5 @@ const hi = [...prov].sort((a, b) => b[1] - a[1]);
     <li><b>Cakupan.</b>Survei tambahan tentang peran internet di pendidikan, kesehatan, dan perhotelan serta segmentasi pasar ISP ada di buku berbayar dan tidak termuat.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Asosiasi Penyelenggara Jasa Internet Indonesia (APJII), <em>Profil Internet Indonesia 2026: Survei Penetrasi Internet dan Perilaku Pengguna</em>, dilaksanakan bersama Swatama Research. Angka dibaca dari infografis PDF; periksa ke <a href="https://survei.apjii.or.id">survei.apjii.or.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Asosiasi Penyelenggara Jasa Internet Indonesia (APJII), <em>Profil Internet Indonesia 2026: Survei Penetrasi Internet dan Perilaku Pengguna</em>, dilaksanakan bersama Swatama Research. Angka dibaca dari infografis PDF; periksa ke <a href="https://survei.apjii.or.id">survei.apjii.or.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

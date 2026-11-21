@@ -1,18 +1,12 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { J } from '../data/pekerja';
 const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
 const hero = [['Buruh/karyawan', 3.29], ['Rata-rata semua', 2.97], ['Bebas nonpertanian', 1.92], ['Bebas pertanian', 1.34]] as const;
 const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendidikan'], ['usaha', 'Lapangan usaha'], ['pekerjaan', 'Pekerjaan dan usia'], ['kesenjangan', 'Kesenjangan'], ['provinsi', 'Provinsi'], ['catatan', 'Catatan']];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Keadaan Pekerja di Indonesia Februari 2026 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Keadaan Pekerja di Indonesia Februari 2026 (BPS, Sakernas): upah, jam kerja, pendidikan, lapangan usaha, UMP, dan kesenjangan." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Keadaan Pekerja di Indonesia Februari 2026 | Ringkasan dan analisis"} description={"Analisis Keadaan Pekerja di Indonesia Februari 2026 (BPS, Sakernas): upah, jam kerja, pendidikan, lapangan usaha, UMP, dan kesenjangan."} nav={nav} current="pekerja">
 <header class="hero"><div class="wrap">
   <h1>Lebih dari separuh buruh digaji di bawah UMP</h1>
   <p class="lead">Dari 54,62 juta buruh/karyawan/pegawai, 52,81% menerima upah di bawah Upah Minimum Provinsi pada Februari 2026. Upah rata-rata 68,21 juta pekerja Rp2,97 juta, tetapi pekerja bebas hanya separuhnya.</p>
@@ -101,5 +95,5 @@ const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendi
     <li><b>Upah nominal.</b>Publikasi tidak menyajikan inflasi, jadi kenaikan upah di sini belum disesuaikan harga.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Keadaan Pekerja di Indonesia Februari 2026</em> (katalog 2303006, ISSN 1979-7702). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Keadaan Pekerja di Indonesia Februari 2026</em> (katalog 2303006, ISSN 1979-7702). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

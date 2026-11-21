@@ -1,21 +1,28 @@
 ---
-import '../styles/global.css';
-const laporan = [
-  { href: '/ecommerce', judul: 'Statistik E-Commerce 2024', ket: 'BPS, terbit November 2025. Usaha online, transaksi, teknologi, dan tantangan pelaku.', angka: '4,40 juta usaha' },
-  { href: '/kesejahteraan', judul: 'Statistik Kesejahteraan Rakyat 2025', ket: 'BPS, Susenas Maret 2025. Pendidikan, kesehatan, perumahan, TIK, dan kesenjangan wilayah.', angka: '78,04% berjaminan kesehatan' },
-  { href: '/pdrb', judul: 'PDRB Kabupaten/Kota 2021–2025', ket: 'BPS, Volume 17, 2026. Ekonomi 514 kabupaten/kota: ukuran, pertumbuhan, per kapita, dan siklus komoditas.', angka: 'Rp23.727 T' },
-  { href: '/pdrb-provinsi', judul: 'PDRB Provinsi menurut Lapangan Usaha 2021–2025', ket: 'BPS, Volume 19, 2026. Struktur 17 lapangan usaha di 38 provinsi, sumber pertumbuhan, dan efek siklus harga komoditas.', angka: 'Rp23.636 T' },
-  { href: '/pekerja', judul: 'Keadaan Pekerja di Indonesia, Februari 2026', ket: 'BPS, Sakernas. Upah, jam kerja, pendidikan, lapangan usaha, dan kesenjangan 68,21 juta pekerja.', angka: 'Rp2,97 juta' },
-  { href: '/pendapatan', judul: 'Statistik Pendapatan Februari 2026', ket: 'BPS, Sakernas. Pendapatan 43,97 juta pekerja bebas dan berusaha sendiri menurut pendidikan, umur, usaha, dan provinsi.', angka: 'Rp1,68–1,92 juta' },
-  { href: '/pendidikan', judul: 'Statistik Pendidikan 2025', ket: 'BPS dan Kemendikdasmen. Sekolah, guru, partisipasi, putus sekolah, dan capaian pendidikan 2021–2025.', angka: 'RLS 9,41 tahun' },
-  { href: '/potensi-desa', judul: 'Statistik Potensi Desa 2025', ket: 'BPS, Podes 2025. Infrastruktur, digital, ekonomi, pemerintahan, lingkungan, dan bencana di 84.139 desa/kelurahan.', angka: '84.291 wilayah' },
-  { href: '/telekomunikasi', judul: 'Statistik Telekomunikasi Indonesia 2025', ket: 'BPS dan Kemenkomdigi. Internet, perangkat, sinyal dan BTS, operator, perdagangan barang TIK, dan belanja rumah tangga.', angka: '77,63% akses internet' },
-  { href: '/apjii', judul: 'Survei APJII Internet Indonesia 2026', ket: 'APJII (survei asosiasi, bukan BPS). Penetrasi, perilaku, operator, internet tetap, belanja online, dan AI dari 8.700 responden.', angka: '81,72% penetrasi' },
-];
+import Layout from '../layouts/Layout.astro';
+import { laporan, kelompok } from '../data/laporan';
+const nav = kelompok.map((k) => [k.id, k.judul] as [string, string]);
 ---
-<!doctype html><html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Ringkasan Laporan Statistik BPS</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<header class="hero"><div class="wrap" style="padding-bottom:64px"><h1>Laporan statistik, diringkas</h1><p class="lead">Ringkasan dan analisis mendalam publikasi BPS, satu laporan per halaman.</p></div></header>
-<section class="s"><div class="wrap"><ul class="hub">{laporan.map((l) => <li><a href={l.href}>{l.judul}</a><b>{l.angka}</b><p>{l.ket}</p></li>)}</ul></div></section>
-</body></html>
+<Layout title="Ringkasan Laporan Statistik BPS dan APJII" description="Ringkasan dan analisis publikasi BPS dan survei APJII, satu laporan per halaman: ekonomi, pekerja, pendidikan, desa, dan internet." nav={nav} home>
+<header class="hero"><div class="wrap" style="padding-bottom:64px">
+  <h1>Laporan statistik, diringkas</h1>
+  <p class="lead">Ringkasan dan analisis publikasi BPS dan survei APJII, satu laporan per halaman. Pilih topik di bawah.</p>
+</div></header>
+
+{kelompok.map((k, i) => (
+  <section class={`s${i % 2 ? ' alt' : ''}`} id={k.id}><div class="wrap grid">
+    <header><h2>{k.judul}</h2><p>{k.ket}</p></header>
+    <ul class="hub">
+      {laporan.filter((l) => l.kelompok === k.id).map((l) => (
+        <li>
+          <div class="ht"><a class="hl" href={`/${l.slug}`}>{l.judul}</a>{l.sumber !== 'BPS' && <span class="tag">{l.sumber}</span>}</div>
+          <p>{l.ket}</p>
+          <div class="fig"><b>{l.angka}</b><small>{l.angkaKet}</small></div>
+        </li>
+      ))}
+    </ul>
+  </div></section>
+))}
+
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik (BPS) dan Asosiasi Penyelenggara Jasa Internet Indonesia (APJII). Ringkasan disusun dari PDF publikasi; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

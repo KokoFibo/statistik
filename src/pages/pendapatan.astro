@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { J } from '../data/pendapatan';
 const n = (v: number | null, f = 2) => v === null ? '–' : v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -9,13 +9,7 @@ const nav = [['ringkasan', 'Ringkasan'], ['distribusi', 'Distribusi'], ['bebas',
 const split = (arr: readonly number[]) => ['a', 'b', 'd', 'e'].map((c, i) => ({ c, w: arr[i] }));
 const lbl = ['< Rp1 juta', 'Rp1–1,99 juta', 'Rp2–2,99 juta', '≥ Rp3 juta'];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Statistik Pendapatan Februari 2026 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis Statistik Pendapatan Februari 2026 (BPS, Sakernas): pendapatan 13,60 juta pekerja bebas dan 30,37 juta berusaha sendiri." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"Statistik Pendapatan Februari 2026 | Ringkasan dan analisis"} description={"Analisis Statistik Pendapatan Februari 2026 (BPS, Sakernas): pendapatan 13,60 juta pekerja bebas dan 30,37 juta berusaha sendiri."} nav={nav} current="pendapatan">
 <header class="hero"><div class="wrap">
   <h1>Hampir dua pertiga pekerja mandiri berpendapatan di bawah Rp2 juta</h1>
   <p class="lead">Pada Februari 2026, 63,4% dari 30,37 juta orang yang berusaha sendiri dan 63,7% dari 13,60 juta pekerja bebas berpendapatan di bawah Rp2 juta sebulan. Tidak ada UMP yang melindungi mereka.</p>
@@ -86,5 +80,5 @@ const lbl = ['< Rp1 juta', 'Rp1–1,99 juta', 'Rp2–2,99 juta', '≥ Rp3 juta']
     <li><b>Nominal.</b>Tanpa penyesuaian harga dan tanpa data tahun sebelumnya.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendapatan Februari 2026</em>, Volume 13 No. 1 (katalog 5204003, ISSN 2598-5639). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Pendapatan Februari 2026</em>, Volume 13 No. 1 (katalog 5204003, ISSN 2598-5639). Angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>

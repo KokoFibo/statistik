@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Bars from '../components/Bars.astro';
 import { J } from '../data/pdrb';
 const n = (v: number, f = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
@@ -14,13 +14,7 @@ const sig = [
   ['Kab. Bengkalis', 'Riau', '139,6', '174,8', '+2,9'], ['Kab. Teluk Bintuni', 'Papua Barat', '31,4', '57,2', '+7,9'],
 ];
 ---
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PDRB Kabupaten/Kota 2021–2025 | Ringkasan dan analisis</title>
-<meta name="description" content="Analisis PDRB 514 kabupaten/kota Indonesia 2021–2025 (BPS, Volume 17, 2026): struktur, pertumbuhan, per kapita, dan siklus komoditas." />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
-<body>
-<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<Layout title={"PDRB Kabupaten/Kota 2021–2025 | Ringkasan dan analisis"} description={"Analisis PDRB 514 kabupaten/kota Indonesia 2021–2025 (BPS, Volume 17, 2026): struktur, pertumbuhan, per kapita, dan siklus komoditas."} nav={nav} current="pdrb">
 <header class="hero"><div class="wrap">
   <h1>Setengah ekonomi Indonesia ada di 50 kabupaten/kota</h1>
   <p class="lead">Jumlah PDRB 514 kabupaten/kota mencapai Rp23.727 triliun pada 2025. Pertumbuhannya stabil di sekitar 5%, tetapi angka tertinggi dan terendah datang dari tambang.</p>
@@ -114,5 +108,5 @@ const sig = [
     <li><b>Salah ketik di sumber.</b>"Kab. Pakpak Bhaat" di tabel pertumbuhan Sumatera Utara; saya samakan dengan Pakpak Bharat.</li>
   </ul>
 </div></section>
-<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Kabupaten/Kota di Indonesia 2021–2025</em>, Volume 17, 2026 (katalog 9302025, ISSN 1907-8242). Seluruh angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
-</body></html>
+<footer slot="footer"><div class="wrap">Sumber: Badan Pusat Statistik, <em>Produk Domestik Regional Bruto Kabupaten/Kota di Indonesia 2021–2025</em>, Volume 17, 2026 (katalog 9302025, ISSN 1907-8242). Seluruh angka dihitung dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</Layout>
